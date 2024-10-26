@@ -466,6 +466,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileManager.cs" />
+    <Compile Include="LocalizationManager.cs" />
     <Compile Include="PluginConfig.cs" />
     <Compile Include="Patcher.cs" />
     <Compile Include="Main.cs" />
@@ -475,6 +477,26 @@
     <Compile Include="UtilsArgu.cs" />
     <Compile Include="WebPage.cs" />
     <Compile Include="WebServer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="WebResources\jquery.min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Languages\deDE.json" />
+    <EmbeddedResource Include="Languages\enGB.json" />
+    <EmbeddedResource Include="Languages\enUS.json" />
+    <EmbeddedResource Include="Languages\esES.json" />
+    <EmbeddedResource Include="Languages\esMX.json" />
+    <EmbeddedResource Include="Languages\frFR.json" />
+    <EmbeddedResource Include="Languages\itIT.json" />
+    <EmbeddedResource Include="Languages\jaJP.json" />
+    <EmbeddedResource Include="Languages\koKR.json" />
+    <EmbeddedResource Include="Languages\plPL.json" />
+    <EmbeddedResource Include="Languages\ptBR.json" />
+    <EmbeddedResource Include="Languages\ruRU.json" />
+    <EmbeddedResource Include="Languages\thTH.json" />
+    <EmbeddedResource Include="Languages\zhCN.json" />
+    <EmbeddedResource Include="Languages\zhTW.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

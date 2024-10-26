@@ -163,7 +163,7 @@ namespace HsMod
                 case "/webshell":
                     return WebPage.Webshell();
                 case "/jquery.min.js":
-                    return new StringBuilder(WebPage.jQuery);
+                    return new StringBuilder(FileManager.ReadEmbeddedFile("./WebResources/jquery.min.js"));
                 default:
                     return new StringBuilder();
             }

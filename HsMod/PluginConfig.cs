@@ -155,7 +155,7 @@ namespace HsMod
         public static void ConfigBind(ConfigFile config)
         {
             config.Clear();
-            pluginInitLanague = config.Bind("Dev", "HsMod.Init.Language", "UNKNOWN", new ConfigDescription("(!!! DON'T EDIT IT, unless you know what you are doing) HsMod Init Language", null, new object[] { "Advanced" }));
+            pluginInitLanague = config.Bind("HsMod", "HsMod.Init.Language", "UNKNOWN", new ConfigDescription("(!!! DON'T EDIT IT, unless you know what you are doing) HsMod Init Language", null, new object[] { "Advanced" }));
 
             if (pluginInitLanague.Value == "UNKNOWN")
             {

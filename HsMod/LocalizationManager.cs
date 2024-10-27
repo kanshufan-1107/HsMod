@@ -36,26 +36,38 @@ namespace HsMod
             return context;
         }
 
+        public static string CacheCurrentLangJson = "";
+        public static string CacheEnUSLangJson = "";
+        public static Dictionary<string, string> CacheCurrentLangJsonObj = null;
+        public static Dictionary<string, string> CacheEnUSLangJsonObj = null;
+
         public static string GetLangValue(string lang_key)
         {
-            var lang_file = GetLangFileContext(pluginInitLanague.Value);
-            var jsonObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(lang_file);
+            if (String.IsNullOrEmpty(CacheCurrentLangJson))
+            {
+                CacheCurrentLangJson = GetLangFileContext(pluginInitLanague.Value);
+                CacheCurrentLangJsonObj = JsonConvert.DeserializeObject<Dictionary<string, string>>(CacheCurrentLangJson);
+            }
+
             string res;
-            if (jsonObject.TryGetValue(lang_key, out res))
+            if (CacheCurrentLangJsonObj.TryGetValue(lang_key, out res))
             {
                 return res;
             }
             else
             {
-                var file = GetLangFileContext("enUS");
-                var job = JsonConvert.DeserializeObject<Dictionary<string, string>>(file);
-                job.TryGetValue(lang_key, out res);
-                if (String.IsNullOrEmpty(res))
+                //Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"Languages key '{lang_key}' not found.");
+                if (String.IsNullOrEmpty(CacheEnUSLangJson))
                 {
-                    Utils.MyLogger(BepInEx.Logging.LogLevel.Error, $"Languages key '{lang_key}' not found.");
-                    return "KEY_NOT_FOUND";
+                    CacheEnUSLangJson = GetLangFileContext("enUS");
+                    CacheEnUSLangJsonObj = JsonConvert.DeserializeObject<Dictionary<string, string>>(CacheEnUSLangJson);
                 }
-                return res;
+                if (CacheEnUSLangJsonObj.TryGetValue(lang_key, out res))
+                {
+                    return res;
+                }
+                Utils.MyLogger(BepInEx.Logging.LogLevel.Error, $"Languages key '{lang_key}' not found.");
+                return "KEY_NOT_FOUND";
             }
         }
 

@@ -76,7 +76,6 @@ Note: The plugin is currently not fully translated.
 5. 2.3. Modify `Hearthstone\doorstop_config.ini` by replacing `dllSearchPathOverride=` with `dllSearchPathOverride=BepInEx\unstripped_corlib`
 6. Note: In [BepInEx 5.4.23.2](https://github.com/BepInEx/BepInEx/releases/tag/v5.4.23.2), modify `Hearthstone\doorstop_config.ini` to replace `dll_search_path_override =` with `dll_search_path_override = BepInEx\unstripped_corlib` `corlib`
 7. Store `HsMod.dll` in `Hearthstone\BepInEx\plugins`.
-8. Install BepInEx [ConfigManager BepInExConfigManager.Mono](https://github.com/sinai-dev/BepInExConfigManager/releases), unzip it to `Hearthstone\BepInEx\` and you're done; enter the game and `F5` for related control.
 
 Note: unity and mono for Windows, extracted from [unity editor](https://unity.com/ja/releases/editor/whats-new/2021.3.40): 
 
@@ -122,8 +121,6 @@ Note: unity and mono for Windows, extracted from [unity editor](https://unity.co
 
 8. Download the HsMod [Releases](https://github.com/Pik-4/HsMod/releases) and unzip to `Hearthstone/BepInEx/plugins`
 
-9. Download the [BepInExConfigManager.Mono](https://github.com/sinai-dev/BepInExConfigManager/releases) and unzip to `Hearthstone/BepInEx`After entering the game, press `F5` to control HsMod.
-
 Now the game needs to be launched only through `./run_bepinex.sh`
 
 If the token becomes obsolete and the game stops opening, then you just need to update it in the `client.config`.
@@ -142,14 +139,14 @@ The first run on Mac may prompt a Battle.net login error, please find HsMod.cfg 
 
 5. Note: You can also copy all the `.dlls` under the project directory `HsMod/UnstrippedCorlibUnix` directly to that directory
 
-6. 1. Download [Mono](https://unity.bepinex.dev/corlibs/2021.3.40.zip) and [Unity](https://unity.bepinex.dev/libraries/2021.3.40.zip), unzip and extract the dlls, copy all dlls to the directory under that directory. 
+6. 
 
-   2. Copy all the .dlls starting with `UniTask` under the project directory `HsMod/UnstrippedCorlibUnix` to that directory. 
+   1. Copy all the .dlls under the project directory `HsMod/UnstrippedCorlibUnix` to that directory. 
 
       ```
       cp HsMod/UnstrippedCorlibUnix/UniTask* hearthstone/BepInEx/unstripped_corlib/
       ```
-      
+   
       ps. UniTask Extracted from net48 of OpenMod.UniTask.2021.2.4.1
 
 7. Modify `unix_bepinex.sh`
@@ -187,8 +184,6 @@ The first run on Mac may prompt a Battle.net login error, please find HsMod.cfg 
 11. If `client.config` is not configured, refer to steps 6-7 in the macOS installation instructions to configure client.config
 
 12. Store `HsMod.dll` in the `hearthstone/BepInEx/plugins` directory (if the plugins directory does not exist, you need to create it manually).
-
-13. Install the BepInEx [ConfigManager BepInExConfigManager.Mono](https://github.com/sinai-dev/BepInExConfigManager/releases) and unzip it to `hearthstone/BepInEx/`; enter the game and `F5` for the relevant controls.
 
 14. Give `run_bepinex.sh` execute permission.
 

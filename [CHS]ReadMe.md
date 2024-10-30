@@ -79,8 +79,6 @@
 
 3. 将`HsMod.dll`存放在`Hearthstone\BepInEx\plugins`。
 
-4. 安装BepInEx配置管理[BepInExConfigManager.Mono](https://github.com/sinai-dev/BepInExConfigManager/releases)，解压到`Hearthstone\BepInEx\`即可；进入游戏后`F5`进行相关控制。
-
 注：Windows的unity和mono，从[unity editor](https://unity.com/ja/releases/editor/whats-new/2021.3.40)中提取：
 
 unity位于`.\Unity 2021.3.40f1\Editor\Data\PlaybackEngines\windowsstandalonesupport\Variations\win32_player_development_mono\Data\Managed`
@@ -127,8 +125,6 @@ UniTask源自OpenMod.UniTask.2021.2.4.1的net48
 
 8. Download the HsMod [Releases](https://github.com/Pik-4/HsMod/releases) and unzip to `Hearthstone/BepInEx/plugins`
 
-9. Download the [BepInExConfigManager.Mono](https://github.com/sinai-dev/BepInExConfigManager/releases) and unzip to `Hearthstone/BepInEx`After entering the game, press `F5` to control HsMod.
-
 Now the game needs to be launched only through `./run_bepinex.sh`
 
 If the token becomes obsolete and the game stops opening, then you just need to update it in the `client.config`.
@@ -145,9 +141,9 @@ Mac上首次运行可能会提示战网登录错误，请找到HsMod.cfg，修�
 
 4. 创建一个目录`hearthstone/BepInEx/unstripped_corlib/`；
 
-   1. 下载[Mono](https://unity.bepinex.dev/corlibs/2021.3.40.zip)和[Unity](https://unity.bepinex.dev/libraries/2021.3.40.zip)，解压提取dll，将所有dll复制到该目录下目录下。
+   1. ~~下载[Mono](https://unity.bepinex.dev/corlibs/2021.3.40.zip)和[Unity](https://unity.bepinex.dev/libraries/2021.3.40.zip)，解压提取dll，将所有dll复制到该目录下目录下。~~
 
-   2. 将项目目录`HsMod/UnstrippedCorlibUnix`下所有`UniTask`开头的.dll复制到该目录下
+   2. 将项目目录`HsMod/UnstrippedCorlibUnix`下所有的.dll复制到该目录下
 
       ````sh
       cp HsMod/UnstrippedCorlibUnix/UniTask* hearthstone/BepInEx/unstripped_corlib/
@@ -188,8 +184,6 @@ Mac上首次运行可能会提示战网登录错误，请找到HsMod.cfg，修�
 7. 如果未配置`client.config`，参考MacOS安装说明中6-7步，配置client.config
 
 8. 将`HsMod.dll`存放在`hearthstone/BepInEx/plugins`目录下（如果plugins目录不存在，需要手动创建）。
-
-9. 安装BepInEx配置管理[BepInExConfigManager.Mono](https://github.com/sinai-dev/BepInExConfigManager/releases)，解压到`hearthstone/BepInEx/`即可；进入游戏后`F5`进行相关控制。
 
 10. 为`run_bepinex.sh`赋予执行权限
 

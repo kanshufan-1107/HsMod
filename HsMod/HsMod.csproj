@@ -253,28 +253,25 @@
     <Reference Include="UniTask">
       <HintPath>UnstrippedCorlib\UniTask.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Burst, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="UniTask.Linq">
+      <HintPath>UnstrippedCorlib\UniTask.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst">
       <HintPath>LibHearthstone\Unity.Burst.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Mathematics, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Unity.Mathematics">
       <HintPath>LibHearthstone\Unity.Mathematics.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
       <HintPath>LibHearthstone\Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.RenderPipelines.Core.Runtime, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Unity.RenderPipelines.Core.Runtime">
       <HintPath>LibHearthstone\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.RenderPipelines.Universal.Runtime, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Unity.RenderPipelines.Universal.Runtime">
       <HintPath>LibHearthstone\Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.SharpZipLib, Version=1.3.3.11, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Unity.SharpZipLib">
       <HintPath>LibHearthstone\Unity.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
@@ -284,185 +281,118 @@
       <HintPath>LibHearthstone\Unity.ZombieObjectDetector.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>UnstrippedCorlib\UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.AccessibilityModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.AccessibilityModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.AIModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.AIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AndroidJNIModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.AndroidJNIModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.AndroidJNIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AnimationModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.AnimationModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.AnimationModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.AssetBundleModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.AssetBundleModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AudioModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.AudioModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.ClothModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.ClothModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.ClusterInputModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.ClusterInputModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.ClusterRendererModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.ClusterRendererModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.AudioModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.CrashReportingModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.CrashReportingModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.DirectorModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.DirectorModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.DSPGraphModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.DSPGraphModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.GameCenterModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.GameCenterModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.DirectorModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.GridModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.GridModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.HotReloadModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.HotReloadModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.GridModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ImageConversionModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.ImageConversionModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.IMGUIModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.IMGUIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.InputLegacyModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.InputModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.InputModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.InputModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.JSONSerializeModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.JSONSerializeModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.LocalizationModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.LocalizationModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.JSONSerializeModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ParticleSystemModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.ParticleSystemModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.PerformanceReportingModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.PerformanceReportingModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.ParticleSystemModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Physics2DModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.Physics2DModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.Physics2DModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.PhysicsModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.ProfilerModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.ProfilerModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ScreenCaptureModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.ScreenCaptureModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.ScreenCaptureModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.SharedInternalsModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.SharedInternalsModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.SpriteMaskModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.SpriteMaskModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.SharedInternalsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.SpriteShapeModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.SpriteShapeModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.StreamingModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.StreamingModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.SubstanceModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.SubstanceModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.SpriteShapeModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.SubsystemsModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.SubsystemsModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.SubsystemsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TerrainModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.TerrainModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.TerrainModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.TerrainPhysicsModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.TerrainPhysicsModule.dll</HintPath>
+    <Reference Include="UnityEngine.TextCoreFontEngineModule">
+      <HintPath>LibHearthstone\UnityEngine.TextCoreFontEngineModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.TextCoreTextEngineModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>UnstrippedCorlib\UnityEngine.TextCoreTextEngineModule.dll</HintPath>
+    <Reference Include="UnityEngine.TextCoreTextEngineModule">
+      <HintPath>LibHearthstone\UnityEngine.TextCoreTextEngineModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.TextRenderingModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.TextRenderingModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TilemapModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.TilemapModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.TLSModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.TLSModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.TilemapModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>LibHearthstone\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIElementsModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.UIElementsModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.UIElementsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIElementsNativeModule">
+      <HintPath>LibHearthstone\UnityEngine.UIElementsNativeModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.UIModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UmbraModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.UmbraModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UNETModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.UNETModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.UIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UnityAnalyticsModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.UnityAnalyticsModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UnityConnectModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.UnityConnectModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UnityTestProtocolModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.UnityTestProtocolModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UnityWebRequestAudioModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.UnityAnalyticsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UnityWebRequestModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.UnityWebRequestModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.UnityWebRequestModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UnityWebRequestTextureModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UnityWebRequestWWWModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.VehiclesModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.VehiclesModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.VFXModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.VFXModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.VFXModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.VideoModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.VideoModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.VideoModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.VRModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.VRModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.VRModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.WindModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.WindModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.WindModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.XRModule">
-      <HintPath>UnstrippedCorlib\UnityEngine.XRModule.dll</HintPath>
+      <HintPath>LibHearthstone\UnityEngine.XRModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

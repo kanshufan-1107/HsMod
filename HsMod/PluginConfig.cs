@@ -473,11 +473,7 @@ namespace HsMod
             }
             else
             {
-                string newConfigFile = "# 皮肤映射表\n";
-                newConfigFile += "# 说明：主要用作英雄（酒馆、对战）类皮肤替换；按下F4会在BepInEx目录下生成当前全部皮肤信息；\n";
-                newConfigFile += "# 格式：原始皮肤:替换皮肤（:为半角字符）；下一行是一个样例(玛法里奥·怒风替换成大导师玛法里奥)，可以删除\n";
-                newConfigFile += "#      亦支持a:b,c,d这种多值映射，实现随机皮肤。\n";
-                newConfigFile += "274:57761\n\n";
+                string newConfigFile = LocalizationManager.GetLangValue("HsSkins.cfg");
                 File.WriteAllText(file, newConfigFile);
             }
         }

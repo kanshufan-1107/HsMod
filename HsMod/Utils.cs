@@ -14,13 +14,13 @@ namespace HsMod
     {
         public enum CardState
         {
-            [Description("默认（不做修改）")]
+            //[Description("默认（不做修改）")]
             Default,
-            [Description("仅友方有效")]
+            //[Description("仅友方有效")]
             OnlyMy,
-            [Description("全部生效")]
+            //[Description("全部生效")]
             All,
-            [Description("禁用特效")]
+            //[Description("禁用特效")]
             Disabled
         }
         //public enum QuickMode

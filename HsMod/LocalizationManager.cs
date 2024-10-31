@@ -20,7 +20,7 @@ namespace HsMod
             //}
             //else { res = localName.ToString(); }
 
-            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"HsMod Languages: {res}");
+            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"CurrentCulture: {res}, HsMod Init {pluginInitLanague.Value}, HsMod {pluginLanague.Value}.");
             return res;
         }
 

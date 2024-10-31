@@ -158,7 +158,7 @@ namespace HsMod
                     allPatchNum += tempatch.GetPatchedMethods().Count();
                 }
                 LoadSkinsConfigFromFile();
-                UIStatus.Get().AddInfo($"[{allPatchNum}]插件状态：" + (isPluginEnable.Value ? "运行" : "停止"));
+                UIStatus.Get().AddInfo($"[{allPatchNum}]" + (isPluginEnable.Value ? LocalizationManager.GetLangValue("PluginEnable") : LocalizationManager.GetLangValue("PluginDisable")));
                 LocalizationManager.GetCurrentLang();
                 InactivePlayerKicker.Get().SetShouldCheckForInactivity(isIdleKickEnable.Value);
                 WebServer.Restart();

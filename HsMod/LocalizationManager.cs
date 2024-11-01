@@ -9,16 +9,18 @@ namespace HsMod
     {
         public static string GetCurrentLang()
         {
-            var localName = Localization.GetLocale();
-            string res;
-            if (localName == Locale.UNKNOWN)
-            {
-                Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"Hearthstone Locale Not Found, now using enUS");
-                res = "enUS";
-            }
-            else { res = localName.ToString(); }
+            System.Globalization.CultureInfo currentCulture = System.Globalization.CultureInfo.CurrentCulture;
+            string languageCode = currentCulture.Name.Replace("-", "");
+            string res = languageCode;
+            //var localName = Localization.GetLocale();
+            //if (localName == Locale.UNKNOWN)
+            //{
+            //    Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"Hearthstone Locale Not Found, now using enUS");
+            //    res = "enUS";
+            //}
+            //else { res = localName.ToString(); }
 
-            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"HsMod Languages: {res}");
+            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"CurrentCulture: {res}, HsMod Init {pluginInitLanague.Value}, HsMod {pluginLanague.Value}.");
             return res;
         }
 

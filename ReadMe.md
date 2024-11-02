@@ -61,7 +61,7 @@ Note: The plugin is currently not fully translated.
 49. Support information display (showinfo, need to enable the plugin, default HTTP, port 58744); support to display mercenary raising progress, pack opening history information, etc.
 50. Support receiving Hearthstone startup parameters, such as specifying resolution size, etc.
 51. Support Webshell, the path is /shell. need to be enabled in the settings, the current Chinese display may be garbled.
-52. Allow reading local files via web, i.e. parsing static pages. This function is still under development, currently using `Hearthstone\website` as the root directory.
+52. Allow reading local files via web, i.e. parsing static pages. This function is still under development, currently using `Hearthstone/BepInEx/HsMod` as the root directory.
 53. ~~Allow lifting the set recognition restriction to open Manning Hearthstone.~~ Has been fixed by Blizzard.
 54. Attempt to disable anti-cheat.
 

@@ -194,7 +194,8 @@ namespace HsMod
                 }
                 else if (keySimulateDisconnect.Value.IsDown())
                 {
-                    Network.Get().SimulateUncleanDisconnectFromGameServer();
+                    Network.Get()?.QueueDispatcher.SetDebugGameConnectionState(false, System.Net.Sockets.SocketError.ConnectionAborted);
+                    //Network.Get()?.SimulateUncleanDisconnectFromGameServer();
                     return;
                 }
                 else if (keyShowFPS.Value.IsDown())
@@ -246,13 +247,13 @@ namespace HsMod
                             }
                             if (GameState.Get().IsMulliganManagerActive() && MulliganManager.Get().GetMulliganButton() != null && keyContinueMulligan.Value.IsDown())
                             {
-                                MulliganManager.Get().AutomaticContinueMulligan();
+                                MulliganManager.Get()?.AutomaticContinueMulligan();
                                 return;
                             }
                         }
                         if (GameMgr.Get().IsBattlegrounds() && keyCopySelectBattleTag.Value.IsDown() && PlayerLeaderboardManager.Get() != null && PlayerLeaderboardManager.Get().IsMousedOver())
                         {
-                            BnetPlayer selectedOpponent = PlayerLeaderboardManager.Get().GetSelectedOpponent();
+                            BnetPlayer selectedOpponent = PlayerLeaderboardManager.Get()?.GetSelectedOpponent();
                             if (selectedOpponent != null)
                             {
                                 BnetBattleTag battleTag = selectedOpponent.GetBattleTag();
@@ -260,7 +261,7 @@ namespace HsMod
                                 {
                                     string @battleTagString = battleTag.GetString();
                                     ClipboardUtils.CopyToClipboard(@battleTagString);
-                                    UIStatus.Get().AddInfo(@battleTagString);
+                                    UIStatus.Get()?.AddInfo(@battleTagString);
                                     return;
                                 }
                             }
@@ -285,7 +286,7 @@ namespace HsMod
                                 if (bnetTag != null)
                                 {
                                     ClipboardUtils.CopyToClipboard(bnetTag.GetString());
-                                    UIStatus.Get().AddInfo(bnetTag.GetString());
+                                    UIStatus.Get()?.AddInfo(bnetTag.GetString());
                                 }
                                 else if (!GameMgr.Get().IsBattlegrounds())
                                 {
@@ -297,7 +298,7 @@ namespace HsMod
                                     }
                                     else tempFullName = Utils.CacheLastOpponentFullName;
                                     ClipboardUtils.CopyToClipboard(@tempFullName);
-                                    UIStatus.Get().AddInfo(@tempFullName);
+                                    UIStatus.Get()?.AddInfo(@tempFullName);
                                 }
                                 return;
                             }

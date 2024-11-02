@@ -2,6 +2,8 @@
 
 **H**earth**s**tone **Mod**ification Based on BepInEx 基于BepInEx的炉石修改，插件源代码位于[github.com/Pik-4/HsMod](https://github.com/Pik-4/HsMod)，插件不会收集您的任何信息；项目遵循`AGPL-3.0`，仅用作学习研究。
 
+HsMod计划开发基于Web的配置管理，如果你感兴趣，可以查看[#122](https://github.com/Pik-4/HsMod/discussions/122)
+
 **警告：中国大陆地区的炉石客户端默认启动了反作弊SDK，插件会尝试屏蔽相关反作弊功能，但无法保证您的账号安全。**
 
 ### 已实现的功能

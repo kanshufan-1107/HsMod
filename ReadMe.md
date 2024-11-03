@@ -69,6 +69,17 @@ Note: The plugin is currently not fully translated.
 
 ### Installation Instructions 
 
+#### Build from source
+
+```
+# .NET SDK: 8.x
+# Release ./HsMod/Release/HsMod.dll
+git clone --depth 1 --branch bepinex5 https://github.com/Pik-4/HsMod
+cd HsMod
+# dotnet restore --locked-mode
+dotnet build --configuration Release --no-restore
+```
+
 #### **Windows** 
 
 1. Compile `HsMod` or download `HsMod.dll` from `Releases`.

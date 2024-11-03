@@ -65,6 +65,17 @@ HsMod计划开发基于Web的配置管理，如果你感兴趣，可以查看[#1
 
 ### 安装说明
 
+#### 编译
+
+```
+# .NET SDK: 8.x
+# Release ./HsMod/Release/HsMod.dll
+git clone --depth 1 --branch bepinex5 https://github.com/Pik-4/HsMod
+cd HsMod
+# dotnet restore --locked-mode
+dotnet build --configuration Release --no-restore
+```
+
 #### Windows
 
 1. 编译`HsMod`或从`Releases`下载`HsMod.dll`。

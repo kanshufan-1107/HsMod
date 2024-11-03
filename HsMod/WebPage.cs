@@ -1,6 +1,7 @@
 ﻿using Assets;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using static HsMod.PluginConfig;
@@ -9,38 +10,6 @@ namespace HsMod
 {
     public class WebPage
     {
-        public static StringBuilder Webshell()
-        {
-            if (string.IsNullOrEmpty(WebServer.shellCommand))
-                return new StringBuilder();
-            StringBuilder stringBuilder = new StringBuilder();
-            try
-            {
-                System.Diagnostics.Process CmdProcess = new System.Diagnostics.Process();
-                CmdProcess.StartInfo.FileName = "cmd.exe";
-                CmdProcess.StartInfo.CreateNoWindow = true;         // 不创建新窗口    
-                CmdProcess.StartInfo.UseShellExecute = false;       //不启用shell启动进程  
-                CmdProcess.StartInfo.RedirectStandardInput = true;  // 重定向输入    
-                CmdProcess.StartInfo.RedirectStandardOutput = true; // 重定向标准输出    
-                CmdProcess.StartInfo.RedirectStandardError = true;  // 重定向错误输出
-                CmdProcess.StartInfo.StandardOutputEncoding = Encoding.Default;    //指定异步输出使用的编码方式
-                CmdProcess.StartInfo.StandardErrorEncoding = Encoding.Default;    //指定异步错误使用的编码方式
-                CmdProcess.StartInfo.Arguments = "/c " + WebServer.shellCommand;    //“/C”表示执行完命令后马上退出  
-                CmdProcess.Start();    //执行  
-
-                stringBuilder.Append(CmdProcess.StandardOutput.ReadToEnd());    //获取返回值  中文字符可能有问题 Encoding 936 data could not be found.
-
-                CmdProcess.WaitForExit(5000);    //等待程序执行完退出进程  timeout为等待的毫秒数，若timeout为负则会无限期等待
-
-                CmdProcess.Close();    //结束
-            }
-            catch (Exception ex)
-            {
-                Utils.MyLogger(BepInEx.Logging.LogLevel.Error, ex);
-            }
-            WebServer.shellCommand = "";
-            return stringBuilder;
-        }
 
         public static StringBuilder Template(string title = "", string body = "")
         {
@@ -1079,8 +1048,60 @@ text-decoration: none;
 
         public static StringBuilder AlivePage()
         {
-            return new StringBuilder().Append(System.Diagnostics.Process.GetCurrentProcess()?.Id.ToString());
+            return new StringBuilder().Append($"{{\"pid\":{System.Diagnostics.Process.GetCurrentProcess()?.Id},\"login\":\"{Utils.CacheLoginStatus}\"}}");
         }
 
+        public static StringBuilder BepInExLogPage()
+        {
+            string logPath = Path.Combine(BepInEx.Paths.BepInExRootPath, "LogOutput.log");
+            StringBuilder output = new StringBuilder().Append("");
+
+            if (File.Exists(logPath))
+            {
+                try
+                {
+                    // 以共享模式打开文件
+                    using (FileStream fs = new FileStream(logPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        using (StreamReader reader = new StreamReader(fs))
+                        {
+                            string content = reader.ReadToEnd();
+                            output.Append(content);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    output.Append(ex.Message);
+                }
+            }
+            return output;
+        }
+        public static StringBuilder HsModCfgPage(string cfg)
+        {
+            string cfgPath = Path.Combine(BepInEx.Paths.ConfigPath, cfg);
+            StringBuilder output = new StringBuilder().Append("");
+
+            if (File.Exists(cfgPath))
+            {
+                try
+                {
+                    // 以共享模式打开文件
+                    using (FileStream fs = new FileStream(cfgPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        using (StreamReader reader = new StreamReader(fs))
+                        {
+                            string content = reader.ReadToEnd();
+                            output.Append(content);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    output.Append(ex.Message);
+                }
+            }
+            return output;
+        }
     }
 }

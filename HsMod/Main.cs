@@ -19,16 +19,22 @@ namespace HsMod
             }
             catch (Exception ex)
             {
-                Utils.MyLogger(BepInEx.Logging.LogLevel.Error, $"{ex.Message} \n{ex.InnerException}");
+                Utils.MyLogger(BepInEx.Logging.LogLevel.Error, $"EnableBepInExLogs: {ex.Message} \n{ex.InnerException} \n{ex.StackTrace}");
             }
 
             // 清除炉石缓存，暂不设置清空判断条件
             if (true == true)
             {
-                Utils.DeleteFolder(Hearthstone.Util.PlatformFilePaths.ExternalDataPath + "/Cache");
-                Utils.DeleteFolder(Hearthstone.Util.PlatformFilePaths.PersistentDataPath + "/Cache");
+                try
+                {
+                    Utils.DeleteFolder(Hearthstone.Util.PlatformFilePaths.ExternalDataPath + "/Cache");
+                    Utils.DeleteFolder(Hearthstone.Util.PlatformFilePaths.PersistentDataPath + "/Cache");
+                }
+                catch (Exception ex)
+                {
+                    Utils.MyLogger(BepInEx.Logging.LogLevel.Error, $"DeleteFolder: {ex.Message} \n{ex.InnerException} \n{ex.StackTrace}");
+                }
             }
-
 
             // 处理命令行参数
             string hsUnitID = "";
@@ -106,12 +112,14 @@ namespace HsMod
         private void Start()
         {
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is started!");
+
             if (!isPluginEnable.Value)
             {
                 OnDestroy();
                 return;
             }
-            //暂时无法移动showFPS相关代码
+
+            //Show FPS info
             showFPS = new GameObject("ShowFPSSceneObject", new Type[] { typeof(HSDontDestroyOnLoad) }).AddComponent<ShowFPS>();
             showFPS.enabled = false;
             showFPS.StartFrameCount();
@@ -145,7 +153,7 @@ namespace HsMod
 
             //启动web服务
             WebServer.Start();
-            //InactivePlayerKicker.Get().SetShouldCheckForInactivity(isIdleKickEnable.Value);
+
         }
 
         private void Update()

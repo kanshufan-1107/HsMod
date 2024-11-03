@@ -139,6 +139,7 @@ namespace HsMod
         public static Dictionary<int, int> HeroesMapping = new Dictionary<int, int>();
         public static Dictionary<string, string> HeroesPowerMapping = new Dictionary<string, string>();
 
+        public static string HsModWebSite;
 
         public static class CommandConfig
         {
@@ -165,6 +166,9 @@ namespace HsMod
              * ^(.*?)( =.*?\()(".*?")(.*?)(".*?")(,.*?,.*?)(".*?")(.*?)$
              * \1\2LocalizationManager\.GetLangValue\("\1.lable"\)\4LocalizationManager\.GetLangValue\("\1.name"\)\6LocalizationManager\.GetLangValue\("\1.description"\)\8
              */
+
+            CreateHsModWorkDir();
+
 
             isPluginEnable = config.Bind(LocalizationManager.GetLangValue("isPluginEnable.label"), LocalizationManager.GetLangValue("isPluginEnable.name"), true, LocalizationManager.GetLangValue("isPluginEnable.description"));
             pluginLanague = config.Bind(LocalizationManager.GetLangValue("pluginLanague.label"), LocalizationManager.GetLangValue("pluginLanague.name"), LocalizationManager.StrToLocale(pluginInitLanague.Value), LocalizationManager.GetLangValue("pluginLanague.description"));
@@ -257,7 +261,7 @@ namespace HsMod
             keyEmoteThreaten = config.Bind(LocalizationManager.GetLangValue("keyEmoteThreaten.label"), LocalizationManager.GetLangValue("keyEmoteThreaten.name"), new KeyboardShortcut(KeyCode.Alpha6), LocalizationManager.GetLangValue("keyEmoteThreaten.description"));
 
             hsLogPath = config.Bind(LocalizationManager.GetLangValue("hsLogPath.label"), LocalizationManager.GetLangValue("hsLogPath.name"), "", new ConfigDescription(LocalizationManager.GetLangValue("hsLogPath.description"), null, new object[] { "Advanced" }));
-            hsMatchLogPath = config.Bind(LocalizationManager.GetLangValue("hsMatchLogPath.label"), LocalizationManager.GetLangValue("hsMatchLogPath.name"), @"BepInEx/HsMatch.log", LocalizationManager.GetLangValue("hsMatchLogPath.description"));
+            hsMatchLogPath = config.Bind(LocalizationManager.GetLangValue("hsMatchLogPath.label"), LocalizationManager.GetLangValue("hsMatchLogPath.name"), Path.Combine(BepInEx.Paths.BepInExRootPath, "HsMod", "match.log"), LocalizationManager.GetLangValue("hsMatchLogPath.description"));
             autoQuitTimer = config.Bind(LocalizationManager.GetLangValue("autoQuitTimer.label"), LocalizationManager.GetLangValue("autoQuitTimer.name"), (long)0, LocalizationManager.GetLangValue("autoQuitTimer.description"));
             isFakeOpenEnable = config.Bind(LocalizationManager.GetLangValue("isFakeOpenEnable.label"), LocalizationManager.GetLangValue("isFakeOpenEnable.name"), false, LocalizationManager.GetLangValue("isFakeOpenEnable.description"));
             buyAdventure = config.Bind(LocalizationManager.GetLangValue("buyAdventure.label"), LocalizationManager.GetLangValue("buyAdventure.name"), Utils.BuyAdventureTemplate.DoNothing, LocalizationManager.GetLangValue("buyAdventure.description"));
@@ -306,7 +310,22 @@ namespace HsMod
             isAutoRefundCardDisenchantEnable.Value = false;  // 自动禁用自动分解，使用时，必须手动开启
 
         }
+        public static void CreateHsModWorkDir()
+        {
+            HsModWebSite = System.IO.Path.Combine(BepInEx.Paths.BepInExRootPath, "HsMod");
+            try
+            {
+                if (!Directory.Exists(PluginConfig.HsModWebSite))
+                {
+                    Directory.CreateDirectory(PluginConfig.HsModWebSite);
+                }
+            }
+            catch (Exception ex)
+            {
 
+                Utils.MyLogger(BepInEx.Logging.LogLevel.Error, $"{ex.Message} \n{ex.InnerException} \n{ex.StackTrace}");
+            }
+        }
         public static void ConfigValueDelegate()
         {
             pluginLanague.SettingChanged += delegate

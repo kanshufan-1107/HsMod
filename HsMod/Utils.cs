@@ -658,6 +658,7 @@ namespace HsMod
         public static string CacheRawHeroCardId;
         public static Blizzard.GameService.SDK.Client.Integration.BnetAccountId CacheLastOpponentAccountID;
         public static List<MercenarySkin> CacheMercenarySkin = new List<MercenarySkin>();
+        public static bool CacheLoginStatus = false;
 
         public static class CacheInfo
         {
@@ -1003,7 +1004,6 @@ namespace HsMod
             }
             else
             {
-                MyLogger(LogLevel.Error, Path.Combine(BepInEx.Paths.ConfigPath, "BepInEx.cfg"));
                 MyLogger(LogLevel.Error, "Logging.UnityLogListening not found");
             }
             if (coreConfig.TryGetEntry("Logging.Disk", "WriteUnityLog", out configWriteUnityLog))
@@ -1036,7 +1036,7 @@ namespace HsMod
             }
             else
             {
-                MyLogger(LogLevel.Warning, "Logging.Disk.LogLevels not found");
+                MyLogger(LogLevel.Error, "Logging.Disk.LogLevels not found");
             }
             if (coreConfig.TryGetEntry("Logging.Unity", "LogLevels", out configUnityLogLevels))
             {
@@ -1044,7 +1044,7 @@ namespace HsMod
             }
             else
             {
-                MyLogger(LogLevel.Warning, "Logging.Unity.LogLevels not found");
+                MyLogger(LogLevel.Warning, $"{BepInEx.Paths.BepInExConfigPath}: Logging.Unity.LogLevels not found.");
             }
         }
 
@@ -1063,18 +1063,38 @@ namespace HsMod
             }
         }
 
+        public static void OnHsLoginCompleted()
+        {
+            Utils.CacheLoginStatus = true;
+            try
+            {
+                if (!isIdleKickEnable.Value)
+                {
+                    InactivePlayerKicker.Get()?.SetShouldCheckForInactivity(isIdleKickEnable.Value);
+                }
+                LeakInfo.Mercenaries();
+                LeakInfo.Skins();
+            }
+            catch (Exception ex)
+            {
+                MyLogger(LogLevel.Error, ex.Message);
+                MyLogger(LogLevel.Error, ex.StackTrace);
+            }
+        }
+
         public static class LeakInfo
         {
-            public static void Mercenaries(string savePath = @"BepInEx/HsMercenaries.log")
+            public static void Mercenaries()
             {
+                string savePath = Path.Combine(BepInEx.Paths.BepInExRootPath, "HsMod", "mercenaries.log");
                 //List<LettuceTeam> teams = CollectionManager.Get().GetTeams();
                 //System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到您的队伍如下：\n");
                 //foreach (LettuceTeam team in teams)
                 //{
                 //    System.IO.File.AppendAllText(savePath, team.Name + "\n");
                 //}
-                System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到关卡信息如下：\n");
-                System.IO.File.AppendAllText(savePath, "[ID]\t[Heroic?]\t[Bounty]\t[BossName]\n");
+                System.IO.File.WriteAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到关卡信息如下：\n");
+                System.IO.File.AppendAllText(savePath, "# [ID]\t[Heroic?]\t[Bounty]\t[BossName]\n");
                 foreach (var record in GameDbf.LettuceBounty.GetRecords())     // 生成关卡名称
                 {
                     string saveString;
@@ -1085,10 +1105,11 @@ namespace HsMod
                     }
                 }
             }
-            public static void MyCards(string savePath = @"BepInEx/HsRefundCards.log")
+            public static void MyCards()
             {
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到全额分解卡牌情况如下：\n");
-                System.IO.File.AppendAllText(savePath, "[Name]\t[PremiumType]\t[Rarity]\t[CardId]\t[CardDbId]\t[OwnedCount]\n");
+                string savePath = Path.Combine(BepInEx.Paths.BepInExRootPath, "HsMod", "refundcards.log");
+                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到全额分解卡牌情况如下：\n");
+                System.IO.File.AppendAllText(savePath, "# [Name]\t[PremiumType]\t[Rarity]\t[CardId]\t[CardDbId]\t[OwnedCount]\n");
                 //Filter<CollectibleCard> filter3 = new Filter<CollectibleCard>((CollectibleCard card) => card.IsRefundable);
                 foreach (var record in CollectionManager.Get().GetOwnedCards())
                 {
@@ -1101,10 +1122,11 @@ namespace HsMod
                     }
                 }
             }
-            public static void Skins(string savePath = "BepInEx/HsSkins.log")
+            public static void Skins()
             {
-                System.IO.File.WriteAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到硬币皮肤如下：\n");
-                System.IO.File.AppendAllText(savePath, "[CARD_ID]\t[Name]\n");
+                string savePath = Path.Combine(BepInEx.Paths.BepInExRootPath, "HsMod", "skins.log");
+                System.IO.File.WriteAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到硬币皮肤如下：\n");
+                System.IO.File.AppendAllText(savePath, "# [CARD_ID]\t[Name]\n");
                 foreach (var record in GameDbf.CosmeticCoin.GetRecords())
                 {
                     string saveString;
@@ -1114,8 +1136,8 @@ namespace HsMod
                         System.IO.File.AppendAllText(savePath, saveString + "\n");
                     }
                 }
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到卡背信息如下：\n");
-                System.IO.File.AppendAllText(savePath, "[ID]\t[Name]\n");
+                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到卡背信息如下：\n");
+                System.IO.File.AppendAllText(savePath, "# [ID]\t[Name]\n");
                 foreach (var record in GameDbf.CardBack.GetRecords())
                 {
                     string saveString;
@@ -1127,21 +1149,21 @@ namespace HsMod
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到游戏面板信息如下：\n");
-                System.IO.File.AppendAllText(savePath, "[ID]\t[NOTE_DESC]\n");
+                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到游戏面板信息如下：\n");
+                System.IO.File.AppendAllText(savePath, "# [ID]\t[NOTE_DESC]\n");
                 foreach (var record in GameDbf.Board.GetRecords())
                 {
                     string saveString;
                     if (record != null)
                     {
                         // GameUtils.TranslateDbIdToCardId(record.CardId, false);
-                        saveString = $"{record.ID}\t{record.GetVar("NOTE_DESC")}";
+                        saveString = $"{record.ID}\t{record.NoteDesc.ToString()}";
                         System.IO.File.AppendAllText(savePath, saveString + "\n");
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到酒馆战斗面板如下：\n");
-                System.IO.File.AppendAllText(savePath, "[ID]\t[CollectionShortName]\t[CollectionName]\n");
+                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到酒馆战斗面板如下：\n");
+                System.IO.File.AppendAllText(savePath, "# [ID]\t[CollectionShortName]\t[CollectionName]\n");
                 foreach (var record in GameDbf.BattlegroundsBoardSkin.GetRecords())
                 {
                     string saveString;
@@ -1153,8 +1175,8 @@ namespace HsMod
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到酒馆终结特效如下：\n");
-                System.IO.File.AppendAllText(savePath, "[ID]\t[CollectionShortName]\t[CollectionName]\n");
+                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到酒馆终结特效如下：\n");
+                System.IO.File.AppendAllText(savePath, "# [ID]\t[CollectionShortName]\t[CollectionName]\n");
                 foreach (var record in GameDbf.BattlegroundsFinisher.GetRecords())
                 {
                     string saveString;
@@ -1166,8 +1188,8 @@ namespace HsMod
                     }
                 }
 
-                System.IO.File.AppendAllText(savePath, DateTime.Now.ToLocalTime().ToString() + "\t获取到英雄皮肤（包括酒馆）如下：\n");
-                System.IO.File.AppendAllText(savePath, "[CARD_ID]\t[Name]\t[HeroType]\n");
+                System.IO.File.AppendAllText(savePath, "# " + DateTime.Now.ToLocalTime().ToString() + "\t获取到英雄皮肤（包括酒馆）如下：\n");
+                System.IO.File.AppendAllText(savePath, "# [CARD_ID]\t[Name]\t[HeroType]\n");
                 foreach (var record in GameDbf.CardHero.GetRecords())
                 {
                     string saveString;

@@ -451,6 +451,16 @@ namespace HsMod
                 return false;
             }
 
+            // login success 
+            [HarmonyPostfix]
+            [HarmonyPatch(typeof(LoginManager), "OnLoginComplete")]
+            public static void PatchOnLoginComplete()
+            {
+                Utils.OnHsLoginCompleted();
+                //Vars.Key("Application.SendExceptions")
+            }
+
+
             //禁用掉线
             [HarmonyPrefix]
             [HarmonyPatch(typeof(InactivePlayerKicker), "SetShouldCheckForInactivity")]
@@ -2529,6 +2539,24 @@ namespace HsMod
                 if (isIGMMessageShow.Value) return true;
                 __result = 0;
                 return false;
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(InnKeepersSpecial), "ShowAdAndIncrementViewCountWhenReady")]
+            public static bool PatchInnKeepersSpecial()
+            {
+                if (isIGMMessageShow.Value) return true;
+                return false;
+            }
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(InnKeepersSpecial), "UpdateAdJson")]
+            public static bool PatchUpdateAdJson(ref string jsonResponse, ref object param)
+            {
+                if (!isIGMMessageShow.Value)
+                {
+                    jsonResponse = "";
+                }
+                return true;
             }
 
             [HarmonyPrefix]

@@ -2,6 +2,8 @@
 
 **H**earth**s**tone **Mod**ification Based on BepInEx 基于BepInEx的炉石修改，插件源代码位于[github.com/Pik-4/HsMod](https://github.com/Pik-4/HsMod)，插件不会收集您的任何信息；项目遵循`AGPL-3.0`，仅用作学习研究。
 
+HsMod计划开发基于Web的配置管理，如果你感兴趣，可以查看[#122](https://github.com/Pik-4/HsMod/discussions/122)
+
 **警告：中国大陆地区的炉石客户端默认启动了反作弊SDK，插件会尝试屏蔽相关反作弊功能，但无法保证您的账号安全。**
 
 ### 已实现的功能
@@ -57,7 +59,7 @@
 49. 支持信息展示（showinfo，需要启用插件，默认HTTP，端口58744）；支持显示佣兵养成进度、开包历史信息等。
 50. 支持接收炉石启动参数，如指定分辨率大小等。
 51. 支持Webshell，路径为/shell。需要在设置中开启，目前中文显示可能存在乱码。
-52. 允许通过Web读取本地文件，即解析静态页面。该功能尚在开发中，目前以`Hearthstone\website`作为根目录。
+52. 允许通过Web读取本地文件，即解析静态页面。该功能尚在开发中，目前以`Hearthstone\BepInEx\HsMod`作为根目录。
 53. ~~允许解除套牌识别限制，以开启万宁炉石。~~已被暴雪修复。
 54. 尝试禁用反作弊。
 

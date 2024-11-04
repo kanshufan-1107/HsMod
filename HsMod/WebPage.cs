@@ -27,6 +27,7 @@ namespace HsMod
 <li class=""nav_li""><a href=""/mercenaries""><button class=""btn_li"">佣兵收藏</button></a></li>
 {nav}
 <li class=""nav_li""><a href=""/about""><button class=""btn_li"">关&emsp;&emsp;于</button></a></li>
+<li class=""nav_li""><a href=""/config/index.html""><button class=""btn_li"">配置修改</button></a></li>
 </ul></center><br />";
             }
             builder.Append($@"
@@ -113,6 +114,7 @@ text-decoration: none;
 <li class=""nav_li""><a href=""/lettuce""><button class=""btn_li"">佣兵关卡</button></a></li>
 <li class=""nav_li""><a href=""/mercenaries""><button class=""btn_li"">佣兵收藏</button></a></li>
 {nav}
+<li class=""nav_li""><a href=""/config/index.html""><button class=""btn_li"">配置修改</button></a></li>
 <li class=""nav_li""><a href=""/about""><button class=""btn_li"">关&emsp;&emsp;于</button></a></li>
 </ul></center><br />";
             }
@@ -194,6 +196,7 @@ text-decoration: none;
             btn += @"<a href=""/lettuce""><button class=""btn_li"">佣兵关卡</button><br/></a><br/>";
             btn += @"<a href=""/mercenaries""><button class=""btn_li"">佣兵收藏</button><br/></a><br/>";
             if (System.IO.File.Exists(CommandConfig.hsMatchLogPath)) btn += @"<a href=""/matchlog""><button class=""btn_li"">炉石对局</button><br/></a><br/>";
+            btn += @"<a href=""/config/index.html""><button class=""btn_li"">配置修改</button><br/></a><br/>";
             btn += @"<a href=""/about""><button class=""btn_li"">关&emsp;&emsp;于</button><br/></a><br/>";
             string body = @"<h1 style=""text-align: center; opacity: 0.6;"">HsMod</h1>";
             body += $@"<div style=""text-align: center; width: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);"">{btn}</div>";
@@ -1051,7 +1054,7 @@ text-decoration: none;
             return new StringBuilder().Append($"{{\"pid\":{System.Diagnostics.Process.GetCurrentProcess()?.Id},\"login\":\"{Utils.CacheLoginStatus}\"}}");
         }
 
-        public static StringBuilder BepInExLogPage()
+        public static StringBuilder BepInExLogPage(int lines = -1)
         {
             string logPath = Path.Combine(BepInEx.Paths.BepInExRootPath, "LogOutput.log");
             StringBuilder output = new StringBuilder().Append("");
@@ -1060,14 +1063,21 @@ text-decoration: none;
             {
                 try
                 {
-                    // 以共享模式打开文件
-                    using (FileStream fs = new FileStream(logPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    if (lines <= 0)
                     {
-                        using (StreamReader reader = new StreamReader(fs))
+                        // 以共享模式打开文件
+                        using (FileStream fs = new FileStream(logPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                         {
-                            string content = reader.ReadToEnd();
-                            output.Append(content);
+                            using (StreamReader reader = new StreamReader(fs))
+                            {
+                                string content = reader.ReadToEnd();
+                                output.Append(content);
+                            }
                         }
+                    }
+                    else
+                    {
+                        output.Append(Utils.ReadLastLine(logPath, 666));
                     }
                 }
                 catch (Exception ex)

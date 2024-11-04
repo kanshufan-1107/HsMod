@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using static HsMod.PluginConfig;
 
 namespace HsMod
@@ -951,6 +952,40 @@ namespace HsMod
             else
             {
                 MyLogger(LogLevel.Warning, $"{BepInEx.Paths.BepInExConfigPath}: Logging.Unity.LogLevels not found.");
+            }
+        }
+
+
+        public static string ReadLastLine(string path, int lines, Encoding encoding = null)
+        {
+            if (encoding == null)
+            {
+                encoding = Encoding.UTF8; 
+            }
+
+            try
+            {
+                var lastLines = new LinkedList<string>();
+
+                using (var stream = new FileStream(path,FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var reader = new StreamReader(stream, encoding))
+                {
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        lastLines.AddLast(line);
+                        if (lastLines.Count >= lines)
+                        {
+                            lastLines.RemoveFirst();
+                        }
+                    }
+                }
+
+                return string.Join(Environment.NewLine, lastLines);
+            }
+            catch (Exception ex) {
+            
+                return ex.Message; // 出现异常时返回空字符串
             }
         }
 

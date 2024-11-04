@@ -303,6 +303,8 @@ namespace HsMod
                     return WebPage.MatchLogPage();
                 case "/alive":
                     return WebPage.AlivePage();
+                case "/bepinex.min.log":
+                    return WebPage.BepInExLogPage(666);
                 case "/bepinex.log":
                     return WebPage.BepInExLogPage();
                 case "/hsmod.cfg":

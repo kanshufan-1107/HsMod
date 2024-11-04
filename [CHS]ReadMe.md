@@ -116,7 +116,7 @@ UniTask源自OpenMod.UniTask.2021.2.4.1的net48
 
    ```
    # Some verify url
-   https://www.battlenet.com.cn/login/zh-cn/?app=wtcg
+   https://account.battlenet.com.cn/login/zh-cn/?app=wtcg
    https://us.battle.net/login/en/?app=wtcg
    https://tw.battle.net/login/zh/?app=wtcg
    https://kr.battle.net/login/zh/?app=wtcg

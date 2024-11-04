@@ -168,7 +168,7 @@ namespace HsMod
                 LoadSkinsConfigFromFile();
                 UIStatus.Get().AddInfo($"[{allPatchNum}]" + (isPluginEnable.Value ? LocalizationManager.GetLangValue("PluginEnable") : LocalizationManager.GetLangValue("PluginDisable")));
                 LocalizationManager.GetCurrentLang();
-                InactivePlayerKicker.Get().SetShouldCheckForInactivity(isIdleKickEnable.Value);
+                InactivePlayerKicker.Get()?.SetShouldCheckForInactivity(isIdleKickEnable.Value);
                 WebServer.Restart();
             }
 
@@ -202,7 +202,7 @@ namespace HsMod
                 }
                 else if (keySimulateDisconnect.Value.IsDown())
                 {
-                    Network.Get()?.QueueDispatcher.SetDebugGameConnectionState(false, System.Net.Sockets.SocketError.ConnectionAborted);
+                    Network.Get()?.QueueDispatcher.SetDebugGameConnectionState(false, System.Net.Sockets.SocketError.ConnectionReset);
                     //Network.Get()?.SimulateUncleanDisconnectFromGameServer();
                     return;
                 }

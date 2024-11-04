@@ -19,6 +19,7 @@ namespace HsMod
         public static string shellCommand;
         public static bool shellCommandLock;
         public static bool pluginConfigLock;
+        public static bool updateLock;
 
         public static void Restart()
         {
@@ -166,6 +167,65 @@ namespace HsMod
                 finally
                 {
                     pluginConfigLock = false;
+                    using (var writer = new StreamWriter(context.Response.OutputStream))
+                    {
+                        await writer.WriteLineAsync($"{{\"status\":{context.Response.StatusCode},\"output\":\"{output}\"}}");
+                    }
+                }
+            }
+            else if (rawUrLower == "/update" && request.HttpMethod == "POST" && !pluginConfigLock)
+            {
+                updateLock = true;
+
+                string output = string.Empty;
+                try
+                {
+                    // Read the JSON from the request body
+                    using (var reader = new StreamReader(request.InputStream))
+                    {
+                        string requestBody = await reader.ReadToEndAsync();
+                        Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, $"POST: {requestBody}");
+                        // Parse JSON and get the "key" field
+                        var json = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(requestBody);
+
+                        if (json != null && json.TryGetValue("key", out string key) && json.TryGetValue("value", out string value))
+                        {
+                            if (string.IsNullOrEmpty(key) || string.IsNullOrEmpty(value))
+                            {
+
+                                context.Response.StatusCode = 400; // Bad Request
+                                output = "Invalid request: key or value not found.";
+                            }
+                            else
+                            {
+                                if (key.ToLower().Equals("hsskins.cfg") || key.ToLower().Equals("hsskins"))
+                                {
+                                    context.Response.StatusCode = WebApi.UpdateHsSkinsCfg(value, out string newValue);
+                                    output = newValue;
+                                }
+                                else
+                                {
+                                    context.Response.StatusCode = 400; // Bad Request
+                                    output = "Invalid request: 'key' not support.";
+                                }
+                            }
+                        }
+                        else
+                        {
+                            context.Response.StatusCode = 400; // Bad Request
+                            output = "Invalid request: 'key' and 'value' field is required.";
+                        }
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    context.Response.StatusCode = 500; // Internal Server Error
+                    output = $"Error update: {ex.Message}";
+                }
+                finally
+                {
+                    updateLock = false;
                     using (var writer = new StreamWriter(context.Response.OutputStream))
                     {
                         await writer.WriteLineAsync($"{{\"status\":{context.Response.StatusCode},\"output\":\"{output}\"}}");

@@ -2215,40 +2215,24 @@ namespace HsMod
                 try
                 {
                     __instance?.SetCardId(cardId);
-
-                    //EntityDef entityDef = DefLoader.Get().GetEntityDef(cardId);
-                    //if (entityDef.GetTag(GAME_TAG.EMOTECHARACTER) > 0)
+                    //try
                     //{
-                    //    GameState gameState = GameState.Get();
-                    //    if (gameState == null)
-                    //    {
-                    //        return;
-                    //    }
-                    //    int entityId = gameState.GetPlayerBySide(Player.Side.FRIENDLY).GetEntityId();
-                    //    int tag = gameState.GetEntity(entityId).GetTag(GAME_TAG.HERO_ENTITY);
-                    //    gameState.GetEntity(tag).SetTag(GAME_TAG.EMOTECHARACTER, entityDef.GetTag(GAME_TAG.EMOTECHARACTER));
+                    //    Utils.UpdateHeroTag(cardId);
                     //}
-                    //if (entityDef.GetTag(GAME_TAG.CORNER_REPLACEMENT_TYPE) > 0)
+                    //catch (Exception ex)
                     //{
-                    //    GameState gameState2 = GameState.Get();
-                    //    if (gameState2 == null)
-                    //    {
-                    //        return;
-                    //    }
-                    //    int entityId2 = gameState2.GetPlayerBySide(Player.Side.FRIENDLY).GetEntityId();
-                    //    gameState2.GetEntity(entityId2).SetTag(GAME_TAG.CORNER_REPLACEMENT_TYPE, entityDef.GetTag(GAME_TAG.CORNER_REPLACEMENT_TYPE));
-                    //    new CornerSpellReplacementManager(false).UpdateCornerReplacements(CornerReplacementSpellType.NONE, CornerReplacementSpellType.NONE);
+                    //    Utils.MyLogger(BepInEx.Logging.LogLevel.Error, ex);
                     //}
-
-                    __instance?.SetRealTimePremium(__instance.GetPremiumType());
                 }
                 catch (Exception ex)
                 {
                     Utils.MyLogger(BepInEx.Logging.LogLevel.Error, ex);
                     cardId = rawCardID;
                     __instance?.SetCardId(rawCardID);
+                }
+                finally
+                {
                     __instance?.SetRealTimePremium(__instance.GetPremiumType());
-
                 }
                 //return;
             }
@@ -2268,6 +2252,26 @@ namespace HsMod
                         __instance?.GetActor()?.SetEntity(__instance.GetEntity());
                         __instance?.GetActor()?.UpdateAllComponents();
                     }
+                    //if (__instance?.GetEntity()?.GetCard()?.GetControllerSide() == Player.Side.FRIENDLY)
+                    //{
+                    //    string cardId = __instance?.GetEntity()?.GetCardId();
+                    //    var cardType = __instance?.GetEntity()?.GetCardType();
+                    //    var cardPremium = __instance.GetEntity().GetPremiumType();
+                    //    if (cardType == TAG_CARDTYPE.HERO || cardType == TAG_CARDTYPE.HERO_POWER)
+                    //    {
+                    //        DefLoader.DisposableCardDef cardDef = DefLoader.Get().GetCardDef(cardId, cardPremium);
+
+                    //        if (!DefLoader.Get().HasLoadedEntityDefs())
+                    //        {
+                    //            DefLoader.Get().LoadAllEntityDefs();
+                    //        }
+                    //        __instance?.GetActor()?.SetCard(__instance);
+                    //        __instance?.GetActor()?.SetCardDef(cardDef);
+                    //        __instance?.GetActor()?.SetEntity(__instance.GetEntity());
+                    //        __instance?.GetActor()?.SetPremium(cardPremium);
+                    //        __instance?.GetActor()?.UpdateAllComponents();
+                    //    }
+                    //}
                 }
                 catch (Exception ex)
                 {

@@ -1,8 +1,10 @@
 ﻿using BepInEx.Configuration;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using static HsMod.PluginConfig;
 
 namespace HsMod
 {
@@ -93,7 +95,23 @@ namespace HsMod
             }
         }
 
+        public static int UpdateHsSkinsCfg(string content, out string res)
+        {
+            res = string.Empty;
 
+            try
+            {
+                File.WriteAllText(Path.Combine(BepInEx.Paths.ConfigPath, "HsSkins.cfg"), content);
+                LoadSkinsConfigFromFile();
+                res = WebPage.HsModCfgPage("HsSkins.cfg").ToString();
+                return 200;
+            }
+            catch (Exception ex)
+            {
+                res = ex.Message;
+                return 500;
+            }
+        }
 
         public static int RunPluginConfigAsync(string key, string value, out string res)
         {
@@ -111,7 +129,7 @@ namespace HsMod
                 if (configKeyProp == null)
                 {
                     res = "key not found.";
-                    return 500;
+                    return 501;
 
                 }
                 var configEntry = (ConfigEntryBase)configKeyProp.GetValue(null);
@@ -123,7 +141,7 @@ namespace HsMod
                     return 200;
                 }
             }
-            return 400;
+            return 500;
         }
 
 

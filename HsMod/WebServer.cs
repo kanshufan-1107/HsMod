@@ -173,7 +173,7 @@ namespace HsMod
                     }
                 }
             }
-            else if (rawUrLower == "/update" && request.HttpMethod == "POST" && !pluginConfigLock)
+            else if (rawUrLower == "/update" && request.HttpMethod == "POST" && !updateLock)
             {
                 updateLock = true;
 

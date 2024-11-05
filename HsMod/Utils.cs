@@ -960,14 +960,14 @@ namespace HsMod
         {
             if (encoding == null)
             {
-                encoding = Encoding.UTF8; 
+                encoding = Encoding.UTF8;
             }
 
             try
             {
                 var lastLines = new LinkedList<string>();
 
-                using (var stream = new FileStream(path,FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 using (var reader = new StreamReader(stream, encoding))
                 {
                     string line;
@@ -983,8 +983,9 @@ namespace HsMod
 
                 return string.Join(Environment.NewLine, lastLines);
             }
-            catch (Exception ex) {
-            
+            catch (Exception ex)
+            {
+
                 return ex.Message; // 出现异常时返回空字符串
             }
         }

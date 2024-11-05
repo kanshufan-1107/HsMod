@@ -430,6 +430,18 @@
     <EmbeddedResource Include="Languages\zhCN.json" />
     <EmbeddedResource Include="Languages\zhTW.json" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="WebResources\HsMod.template.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="WebResources\shell.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="WebResources\about.enUS.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="WebResources\about.zhCN.html" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>$(ProjectDir)\install.bat</PostBuildEvent>

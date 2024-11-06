@@ -1510,6 +1510,16 @@ namespace HsMod
 
         public class PatchHearthstone
         {
+            // fix #131
+            [HarmonyPostfix]
+            [HarmonyPatch(typeof(TagMap), "GetMap")]
+            public static void PatchTagMapGetMap( ref Dictionary<int, int> __result)
+            {
+                // todo: check call from;
+                // return a copy to prevent modification in foreach
+                __result = __result.ToList().ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            }
+
             //金卡钻石卡补丁
             [HarmonyPrefix]
             [HarmonyPatch(typeof(Entity), "GetPremiumType")]

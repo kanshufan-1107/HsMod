@@ -1,38 +1,38 @@
-name: Close Issues Not from Collaborators Using custom.yml Template
+name: Close Issues Not Created by Collaborators (No Notifications)
 
 on:
   issues:
-    types: [opened] 
+    types: [opened]
 
 jobs:
-  close_non_collaborators_issues:
+  close_non_collaborator_issues:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check if issue is created from custom.yml template and not by a collaborator
+    - name: Check if issue is created from custom.yml template
       uses: actions/github-script@v6
       with:
         script: |
           const issue = context.payload.issue;
           const repoName = context.repo.repo;
           const issueUrl = issue.html_url;
-          const creator = issue.user.login;
-
-          const { data: collaborators } = await github.rest.repos.listCollaborators({
-            owner: context.repo.owner,
-            repo: repoName
-          });
-
-          const isCustomTemplate = issue.body.includes('.github/ISSUE_TEMPLATE/custom.yml');
-
-          const isCollaborator = collaborators.some(collaborator => collaborator.login === creator);
-          
-          if (isCustomTemplate && !isCollaborator) {
-            await github.rest.issues.update({
+          const template = issue.body.includes('.github/ISSUE_TEMPLATE/custom.yml');
+          if (template) {
+            const creator = issue.user.login;
+            const { data: collaborators } = await github.rest.repos.listCollaborators({
               owner: context.repo.owner,
-              repo: repoName,
-              issue_number: issue.number,
-              state: 'closed',
+              repo: repoName
             });
-            console.log(`Closed issue #${issue.number} as it was created from custom template and user is not a collaborator.`);
+            const isCollaborator = collaborators.some(collaborator => collaborator.login === creator);
+            if (!isCollaborator) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: repoName,
+                issue_number: issue.number,
+                state: 'closed',
+                assignee: []
+              });
+              console.log(`Closed issue #${issue.number} as it was created by a non-collaborator and used the custom template.`);
+            }
           }
+

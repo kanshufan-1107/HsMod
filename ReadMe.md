@@ -98,17 +98,17 @@ Note: unity and mono for Windows, extracted from [unity editor](https://unity.co
 
 #### Mac
 
-1. Download the latest version of [BepInEx_unix](https://github.com/BepInEx/BepInEx/releases) and extract it to `Hearthstone/`
+1. Download the latest version of [BepInEx_macos_x64](https://github.com/BepInEx/BepInEx/releases) (BepInEx 5)and extract it to `Hearthstone/`
 
-2. ~~Download original [Mono](https://unity.bepinex.dev/corlibs/2021.3.40.zip) and [Unity](https://unity.bepinex.dev/libraries/2021.3.40.zip) libraries and unpack to Hearthstone/BepInEx/unstripped_corlib~~. Copy all `dll` which under the project folder `HsMod/UnstrippedCorlibUnix` (`cp HsMod/UnstrippedCorlibUnix/*  Hearthstone/BepInEx/unstripped_corlib/` ). ( PS. Mono and Unity version must same as Hearthstone ).
+2. ~~Download original [Mono](https://unity.bepinex.dev/corlibs/2021.3.40.zip) and [Unity](https://unity.bepinex.dev/libraries/2021.3.40.zip) libraries and unpack to Hearthstone/BepInEx/unstripped_corlib~~. Copy all `dll` which under the project folder `HsMod/UnstrippedCorlibUnix` (`cp HsMod/UnstrippedCorlibUnix/* /Applications/Hearthstone/BepInEx/unstripped_corlib/   ` ). ( PS. Mono and Unity version must same as Hearthstone ).
 
-3. Edit the `run_bepinex.sh` file replacing the line `export DOORSTOP_CORLIB_OVERRIDE_PATH=""`with `DOORSTOP_CORLIB_OVERRIDE_PATH="$BASEDIR/BepInEx/unstripped_corlib"`
+3. Edit the `run_bepinex.sh` file replacing the line ` dll_search_path_override=""`with `dll_search_path_override="BepInEx/unstripped_corlib"`
 
 4. Edit the file `run_bepinex.sh` replacing the line `executable_name=""` with `executable_name="Hearthstone.app"`
 
 5. Run command in console `chmod u+x run_bepinex.sh`
 
-6. Get the [token](https://www.battlenet.com.cn/login/zh-cn/?app=wtcg) here and copy after `http://localhost:0/?ST=` and before `&accountId=`
+6. Get the [TOKEN](https://www.battlenet.com.cn/login/zh-cn/?app=wtcg) here and copy after `http://localhost:0/?ST=` and before `&accountId=`
 
    ```
    # Some verify url
@@ -120,25 +120,23 @@ Note: unity and mono for Windows, extracted from [unity editor](https://unity.co
    ...
    ```
 
-7. Create a `client.config` file with the following content, instead of `token` - insert the token obtained in the previous step. Env value `xx.actual.battle.net`(parameter for China is `cn.actual.battlenet.com.cn`); `xx` same as the token first two characters. E.g
+7. (Not Necessary)Create a `client.config` file with the following content, instead of `TOKEN` - insert the token obtained in the previous step. Env value `xx.actual.battle.net`(cn is `cn.actual.battlenet.com.cn`); `xx` same as the token first two characters. E.g
 
    ```
    [Config]
    Version = 3
    [Aurora]
-   VerifyWebCredentials = "token"
+   VerifyWebCredentials = "TOKEN"
    ClientCheck = 0
    Env.Override = 1
    Env = us.actual.battle.net
    ```
 
+   If the token becomes obsolete and the game stops opening, then you just need to update it in the `client.config`.
+
 8. Download the HsMod [Releases](https://github.com/Pik-4/HsMod/releases) and unzip to `Hearthstone/BepInEx/plugins`
 
-Now the game needs to be launched only through `./run_bepinex.sh`
-
-If the token becomes obsolete and the game stops opening, then you just need to update it in the `client.config`.
-
-The first run on Mac may prompt a Battle.net login error, please find HsMod.cfg and modify the activation plugin, please refer to [#](https://github.com/Pik-4/HsMod/issues/8#issuecomment-1344470389)[8](https://github.com/Pik-4/HsMod/issues/8#issuecomment-1344470389) for details.
+Now the game needs to be launched only through `./run_bepinex.sh TOKEN`  or  `./run_bepinex.sh` (When the command line does not contain a TOKEN, `client.config` is necessary).
 
 #### **Linux** 
 

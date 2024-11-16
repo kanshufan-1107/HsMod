@@ -1510,117 +1510,29 @@ namespace HsMod
 
         public class PatchHearthstone
         {
+            // fix #131
+            [HarmonyPostfix]
+            [HarmonyPatch(typeof(TagMap), "GetMap")]
+            public static void PatchTagMapGetMap(ref Dictionary<int, int> __result)
+            {
+                // todo: check call from;
+                // return a copy to prevent modification in foreach
+                __result = __result.ToList().ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            }
+
             //金卡钻石卡补丁
             [HarmonyPrefix]
             [HarmonyPatch(typeof(Entity), "GetPremiumType")]
             public static bool PatchGetPremiumType(Entity __instance, ref TAG_PREMIUM __result)
             {
-                try
-                {
-                    if (GameMgr.Get() != null && GameState.Get() != null && GameState.Get().IsGameCreatedOrCreating())
-                    {
-                        //跳过酒馆随从
-                        if (GameMgr.Get().IsBattlegrounds())
-                        {
-                            if (!isBgsGoldenEnable.Value || __instance.IsMinion() || __instance.IsQuest())
-                                return true;
-                        }
-
-                        Utils.CardState mGolden = goldenCardState.Value;
-                        Utils.CardState mMaxState = maxCardState.Value;
-
-                        //佣兵镀金
-                        int dbid = GameUtils.TranslateCardIdToDbId(__instance.GetCardId());
-                        bool mercDiamond = false;
-                        bool isMerc = false;
-                        if (Utils.CheckInfo.IsMercenarySkin(__instance.GetCardId(), out Utils.MercenarySkin skin))
-                        {
-                            isMerc = true;
-                            if (dbid == skin.Diamond)
-                            {
-                                mercDiamond = true;
-                            }
-                        }
-
-                        //屏蔽对手特效
-                        if (__instance.IsControlledByOpposingSidePlayer() && (!isOpponentGoldenCardShow.Value) && (!GameMgr.Get().IsBattlegrounds()))
-                        {
-                            __result = TAG_PREMIUM.NORMAL;
-                            if (isMerc)
-                            {
-                                __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.NORMAL);
-                                __instance.SetTag(GAME_TAG.HAS_DIAMOND_QUALITY, false);
-                            }
-                            return false;
-                        }
-
-
-                        //其他品质
-                        if (__instance.HasTag(GAME_TAG.HAS_DIAMOND_QUALITY) || __instance.HasTag(GAME_TAG.HAS_SIGNATURE_QUALITY) || mercDiamond)
-                        {
-                            if (__instance.HasTag(GAME_TAG.HAS_DIAMOND_QUALITY) || mercDiamond)
-                            {
-                                if (mMaxState == Utils.CardState.All || (mMaxState == Utils.CardState.OnlyMy && __instance.IsControlledByFriendlySidePlayer()))
-                                {
-                                    if (mercDiamond)
-                                    {
-                                        __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.DIAMOND);
-                                        __instance.SetTag(GAME_TAG.HAS_DIAMOND_QUALITY, true);
-                                    }
-                                    __result = TAG_PREMIUM.DIAMOND;
-                                    return false;
-                                }
-                            }
-
-                            if (__instance.HasTag(GAME_TAG.HAS_SIGNATURE_QUALITY) && isSignatureCardStateEnable.Value)
-                            {
-                                if (mMaxState == Utils.CardState.All || (mMaxState == Utils.CardState.OnlyMy && __instance.IsControlledByFriendlySidePlayer()))
-                                {
-                                    __result = TAG_PREMIUM.SIGNATURE;
-                                    __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.SIGNATURE);
-                                    return false;
-                                }
-                            }
-
-                            if ((mMaxState == Utils.CardState.Disabled) && (mGolden == Utils.CardState.Disabled))
-                            {
-                                __result = TAG_PREMIUM.NORMAL;
-                                if (isMerc)
-                                {
-                                    __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.NORMAL);
-                                    __instance.SetTag(GAME_TAG.HAS_DIAMOND_QUALITY, false);
-                                }
-                                return false;
-                            }
-                        }
-                        //金卡特效
-                        if (mGolden == Utils.CardState.All || (mGolden == Utils.CardState.OnlyMy && __instance.IsControlledByFriendlySidePlayer()))
-                        {
-                            __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.GOLDEN);
-                            __result = TAG_PREMIUM.GOLDEN;
-                            return false;
-                        }
-                        //禁用特效
-                        if (mGolden == Utils.CardState.Disabled)
-                        {
-                            __result = TAG_PREMIUM.NORMAL;
-                            if (isMerc)
-                            {
-                                __instance.SetTag(GAME_TAG.PREMIUM, TAG_PREMIUM.NORMAL);
-                                __instance.SetTag(GAME_TAG.HAS_DIAMOND_QUALITY, false);
-                            }
-                            return false;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Utils.MyLogger(BepInEx.Logging.LogLevel.Error, ex);
-                    Utils.MyLogger(BepInEx.Logging.LogLevel.Error, ex.StackTrace);
-                }
-                return true;
+                return Utils.GetPremiumType(ref __instance, ref __result);
             }
-
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(Actor), nameof(Actor.GetPremium))]
+            public static bool PatchActorGetPremiumType(ref TAG_PREMIUM __result, ref Entity ___m_entity, ref Actor __instance)
+            {
+                return Utils.GetPremiumType(ref ___m_entity, ref __result);
+            }
 
             //设置下个对手、用于获取战网标签
             [HarmonyTranspiler]
@@ -2029,7 +1941,7 @@ namespace HsMod
             //加载处理
             [HarmonyPrefix]
             [HarmonyPatch(typeof(Entity), "LoadCard")]
-            public static void PatchLoadCard(Entity __instance, ref string cardId, ref Entity.LoadCardData data)
+            public static void PatchLoadCard(Entity __instance, ref string cardId)
             {
                 string rawCardID = cardId;
                 if (cardId != null
@@ -2214,41 +2126,19 @@ namespace HsMod
             LoadCardEnd:    // todo: check Signature
                 try
                 {
+                    if (__instance.GetCard()?.GetControllerSide() == Player.Side.FRIENDLY)
+                        Utils.UpdateHeroTag(cardId);
                     __instance?.SetCardId(cardId);
-
-                    //EntityDef entityDef = DefLoader.Get().GetEntityDef(cardId);
-                    //if (entityDef.GetTag(GAME_TAG.EMOTECHARACTER) > 0)
-                    //{
-                    //    GameState gameState = GameState.Get();
-                    //    if (gameState == null)
-                    //    {
-                    //        return;
-                    //    }
-                    //    int entityId = gameState.GetPlayerBySide(Player.Side.FRIENDLY).GetEntityId();
-                    //    int tag = gameState.GetEntity(entityId).GetTag(GAME_TAG.HERO_ENTITY);
-                    //    gameState.GetEntity(tag).SetTag(GAME_TAG.EMOTECHARACTER, entityDef.GetTag(GAME_TAG.EMOTECHARACTER));
-                    //}
-                    //if (entityDef.GetTag(GAME_TAG.CORNER_REPLACEMENT_TYPE) > 0)
-                    //{
-                    //    GameState gameState2 = GameState.Get();
-                    //    if (gameState2 == null)
-                    //    {
-                    //        return;
-                    //    }
-                    //    int entityId2 = gameState2.GetPlayerBySide(Player.Side.FRIENDLY).GetEntityId();
-                    //    gameState2.GetEntity(entityId2).SetTag(GAME_TAG.CORNER_REPLACEMENT_TYPE, entityDef.GetTag(GAME_TAG.CORNER_REPLACEMENT_TYPE));
-                    //    new CornerSpellReplacementManager(false).UpdateCornerReplacements(CornerReplacementSpellType.NONE, CornerReplacementSpellType.NONE);
-                    //}
-
-                    __instance?.SetRealTimePremium(__instance.GetPremiumType());
                 }
                 catch (Exception ex)
                 {
                     Utils.MyLogger(BepInEx.Logging.LogLevel.Error, ex);
                     cardId = rawCardID;
                     __instance?.SetCardId(rawCardID);
+                }
+                finally
+                {
                     __instance?.SetRealTimePremium(__instance.GetPremiumType());
-
                 }
                 //return;
             }
@@ -2268,6 +2158,26 @@ namespace HsMod
                         __instance?.GetActor()?.SetEntity(__instance.GetEntity());
                         __instance?.GetActor()?.UpdateAllComponents();
                     }
+                    //if (__instance?.GetEntity()?.GetCard()?.GetControllerSide() == Player.Side.FRIENDLY)
+                    //{
+                    //    string cardId = __instance?.GetEntity()?.GetCardId();
+                    //    var cardType = __instance?.GetEntity()?.GetCardType();
+                    //    var cardPremium = __instance.GetEntity().GetPremiumType();
+                    //    if (cardType == TAG_CARDTYPE.HERO || cardType == TAG_CARDTYPE.HERO_POWER)
+                    //    {
+                    //        DefLoader.DisposableCardDef cardDef = DefLoader.Get().GetCardDef(cardId, cardPremium);
+
+                    //        if (!DefLoader.Get().HasLoadedEntityDefs())
+                    //        {
+                    //            DefLoader.Get().LoadAllEntityDefs();
+                    //        }
+                    //        __instance?.GetActor()?.SetCard(__instance);
+                    //        __instance?.GetActor()?.SetCardDef(cardDef);
+                    //        __instance?.GetActor()?.SetEntity(__instance.GetEntity());
+                    //        __instance?.GetActor()?.SetPremium(cardPremium);
+                    //        __instance?.GetActor()?.UpdateAllComponents();
+                    //    }
+                    //}
                 }
                 catch (Exception ex)
                 {
@@ -2334,7 +2244,6 @@ namespace HsMod
                     else return true;
                 }
             }
-
 
             //游戏面板替换
             [HarmonyPrefix]

@@ -20,7 +20,7 @@ namespace HsMod
             //}
             //else { res = localName.ToString(); }
 
-            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"CurrentCulture: {res}, Hearthstone {Localization.GetLocale()}, HsMod Init {pluginInitLanague.Value}, HsMod {pluginLanague.Value}.");
+            Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, $"CurrentCulture: {res}, Hearthstone {Localization.GetLocale()}, HsMod {pluginInitLanague.Value}.");
             return res;
         }
 

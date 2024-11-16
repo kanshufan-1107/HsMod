@@ -6,11 +6,12 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using static HsMod.PluginConfig;
 
 namespace HsMod
 {
-    public class Utils
+    public partial class Utils
     {
         public enum CardState
         {
@@ -890,103 +891,9 @@ namespace HsMod
             return (coinNeed > 0) ? coinNeed : 8192;
         }
 
-        public static class CheckInfo
-        {
-            public static bool IsCoin()
-            {
-                if (CacheCoin.Count == 0) CacheInfo.UpdateCoin();
-                if (CacheCoin.Contains(skinCoin.Value)) return true;
-                else return false;
-            }
-            public static bool IsCoin(string cardId)
-            {
-                int dbId = GameUtils.TranslateCardIdToDbId(cardId);
-                if (CacheCoinCard.Count == 0) CacheInfo.UpdateCoinCard();
-                if (CacheCoinCard.Contains(dbId)) return true;
-                else return false;
-            }
-            public static bool IsBoard()
-            {
-                if (CacheGameBoard.Count == 0) CacheInfo.UpdateGameBoard();
-                if (CacheGameBoard.Contains(skinBoard.Value)) return true;
-                else return false;
-            }
-            public static bool IsBgsBoard()
-            {
-                if (CacheBgsBoard.Count == 0) CacheInfo.UpdateBgsBoard();
-                if (CacheBgsBoard.Contains(skinBgsBoard.Value)) return true;
-                else return false;
-            }
-            public static bool IsHero(int DbID, out Assets.CardHero.HeroType heroType)
-            {
-                if (CacheHeroes.Count == 0) CacheInfo.UpdateHeroes();
-                if (CacheHeroes.ContainsKey(DbID))
-                {
-                    heroType = CacheHeroes[DbID];
-                    return true;
-                }
-                if (DefLoader.Get()?.GetEntityDef(DbID)?.GetCardType() == TAG_CARDTYPE.HERO)
-                {
-                    heroType = Assets.CardHero.HeroType.UNKNOWN;
-                    return true;
-                }
-                else
-                {
-                    heroType = Assets.CardHero.HeroType.UNKNOWN;
-                    return false;
-                }
-            }
-            public static bool IsCardBack()
-            {
-                if (CacheCardBack.Count == 0) CacheInfo.UpdateCardBack();
-                if (CacheCardBack.Contains(skinCardBack.Value)) return true;
-                else return false;
-            }
-            public static bool IsBgsFinisher()
-            {
-                if (CacheBgsFinisher.Count == 0) CacheInfo.UpdateBgsFinisher();
-                if (CacheBgsFinisher.Contains(skinBgsFinisher.Value)) return true;
-                else return false;
-            }
-
-            public static bool IsHero(string cardID, out Assets.CardHero.HeroType heroType)
-            {
-                if (CacheHeroes.Count == 0) CacheInfo.UpdateHeroes();
-                int dbid = GameUtils.TranslateCardIdToDbId(cardID);
-                if (CacheHeroes.ContainsKey(dbid))
-                {
-                    heroType = CacheHeroes[dbid];
-                    return true;
-                }
-                else
-                {
-                    heroType = Assets.CardHero.HeroType.UNKNOWN;
-                    return false;
-                }
-            }
-
-            public static bool IsMercenarySkin(string cardID, out MercenarySkin skin)
-            {
-                if (CacheMercenarySkin.Count == 0) CacheInfo.UpdateMercenarySkin();
-                int dbid = GameUtils.TranslateCardIdToDbId(cardID);
-
-                foreach (var mercSkin in CacheMercenarySkin)
-                {
-                    if (mercSkin.Id.Contains(dbid))
-                    {
-                        skin = mercSkin;
-                        return true;
-                    }
-                }
-                skin = new MercenarySkin();
-                return false;
-            }
-
-        }
-
         public static void EnableBepInExLogs()
         {
-            var coreConfigProp = typeof(BepInEx.Configuration.ConfigFile).GetProperty("CoreConfig", BindingFlags.Static | BindingFlags.NonPublic);
+            var coreConfigProp = typeof(BepInEx.Configuration.ConfigFile).GetProperty("CoreConfig", BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
             if (coreConfigProp == null) throw new ArgumentNullException(nameof(coreConfigProp));
             var coreConfig = (BepInEx.Configuration.ConfigFile)coreConfigProp.GetValue(null, null);
 
@@ -1045,6 +952,41 @@ namespace HsMod
             else
             {
                 MyLogger(LogLevel.Warning, $"{BepInEx.Paths.BepInExConfigPath}: Logging.Unity.LogLevels not found.");
+            }
+        }
+
+
+        public static string ReadLastLine(string path, int lines, Encoding encoding = null)
+        {
+            if (encoding == null)
+            {
+                encoding = Encoding.UTF8;
+            }
+
+            try
+            {
+                var lastLines = new LinkedList<string>();
+
+                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var reader = new StreamReader(stream, encoding))
+                {
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        lastLines.AddLast(line);
+                        if (lastLines.Count >= lines)
+                        {
+                            lastLines.RemoveFirst();
+                        }
+                    }
+                }
+
+                return string.Join(Environment.NewLine, lastLines);
+            }
+            catch (Exception ex)
+            {
+
+                return ex.Message; // 出现异常时返回空字符串
             }
         }
 

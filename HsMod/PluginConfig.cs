@@ -481,7 +481,7 @@ namespace HsMod
                         string[] parts = line.Split(':');
                         if (parts.Length == 2)
                         {
-                            if (!HeroesMapping.ContainsKey(int.Parse(parts[0])))
+                            if (!HeroesMapping.ContainsKey(int.Parse(parts[0].Trim())))
                             {
                                 string[] skins = parts[1].Split(',');
                                 HeroesMapping.Add(int.Parse(parts[0].Trim()), int.Parse(skins[new System.Random().Next(skins.Length)].Trim()));

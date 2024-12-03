@@ -17,6 +17,7 @@ namespace HsMod
         public static ConfigEntry<bool> isShortcutsEnable;
         public static ConfigEntry<int> targetFrameRate;
         public static ConfigEntry<bool> isDynamicFpsEnable;
+        public static ConfigEntry<bool> isEulaRead;
 
         public static ConfigEntry<int> timeGear;
         public static ConfigEntry<int> receiveEnemyEmoteLimit;
@@ -157,6 +158,7 @@ namespace HsMod
         {
             config.Clear();
             pluginInitLanague = config.Bind("HsMod", "HsMod.Init.Language", "UNKNOWN", new ConfigDescription("(!!! DON'T EDIT IT, unless you know what you are doing) HsMod Init Language", null, new object[] { "Advanced" }));
+            isEulaRead = config.Bind("HsMod", "HsMod.Init.Eula", false, new ConfigDescription("End-User License Agreement", null, new object[] { "Advanced" }));
 
             if (pluginInitLanague.Value == "UNKNOWN")
             {

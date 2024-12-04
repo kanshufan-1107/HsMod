@@ -617,16 +617,29 @@ namespace HsMod
             //战令、成就等奖励领取提示
             [HarmonyPrefix]
             [HarmonyPatch(typeof(Hearthstone.Progression.RewardTrack), "HandleRewardGranted")]
-            public static bool PatchHandleRewardGranted(int rewardTrackId, int level, bool forPaidTrack, List<PegasusUtil.RewardItemOutput> rewardItemOutput)      //隐藏通行证奖励
-            {
-                if (!isRewardToastShow.Value)
-                {
-                    Hearthstone.Progression.RewardTrackManager.Get().GetRewardTrack(Assets.Global.RewardTrackType.GLOBAL)?.AckReward(rewardTrackId, level, forPaidTrack);
-                    Hearthstone.Progression.RewardTrackManager.Get().GetRewardTrack(Assets.Global.RewardTrackType.BATTLEGROUNDS)?.AckReward(rewardTrackId, level, forPaidTrack);
-                    return false;
-                }
-                else return true;
-            }
+            public static bool PatchHandleRewardGranted(//隐藏通行证奖励
+            int rewardTrackId,
+            int level,
+             RewardTrackPaidType paidType,
+                     List<PegasusUtil.RewardItemOutput> rewardItemOutput) // 隐藏通行证奖励
+                         {
+                             if (!isRewardToastShow.Value)
+                         {
+                           // 判断是免费还是付费通行证
+                             bool isPaidTrack = paidType != RewardTrackPaidType.RTPT_FREE;
+                            // Acknowledge GLOBAL track rewards
+                             Hearthstone.Progression.RewardTrackManager.Get()
+                             .GetRewardTrack(Assets.Global.RewardTrackType.GLOBAL)?
+                             .AckReward(rewardTrackId, level, paidType);
+                             // Acknowledge BATTLEGROUNDS track rewards
+                            Hearthstone.Progression.RewardTrackManager.Get()
+                             .GetRewardTrack(Assets.Global.RewardTrackType.BATTLEGROUNDS)?
+                             .AckReward(rewardTrackId, level, paidType);
+                             return false; // 阻止原始方法执行
+                         }
+
+     return true; // 允许原始方法执行
+ }
 
             //测试补丁，屏蔽奖励显示
             [HarmonyPrefix]

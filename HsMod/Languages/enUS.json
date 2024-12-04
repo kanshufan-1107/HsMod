@@ -1,4 +1,5 @@
 ﻿{
+  "hsmod.declaration": "[Free Software] Distributed only on GitHub.\nhttps://github.com/Pik-4/HsMod",
   "isPluginEnable.name": "HsMod Status",
   "isPluginEnable.label": "Global",
   "isPluginEnable.description": "Enable or disable the plugin (suggested to restart Hearthstone after changing this setting)",

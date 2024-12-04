@@ -1,4 +1,5 @@
 ﻿{
+	"hsmod.declaration": "[开源软件] HsMod仅在GitHub进行分发，谨防被骗。\nhttps://github.com/Pik-4/HsMod",
 	"isPluginEnable.name": "HsMod状态",
 	"isPluginEnable.label": "全局",
 	"isPluginEnable.description": "是否启用插件（修改该选项后建议重启炉石）",

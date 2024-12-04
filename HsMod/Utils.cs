@@ -403,10 +403,6 @@ namespace HsMod
 
         public static void TryRefundCardDisenchant()    //TellServerAboutWhatUserDid
         {
-            if (!isAutoRefundCardDisenchantEnable.Value)
-            {
-                return;
-            }
             int totalSell = 0;
             Network network = Network.Get();
             network.RegisterNetHandler(PegasusUtil.BoughtSoldCard.PacketID.ID, new Network.NetHandler(TryRefundCardDisenchantCallback), null);
@@ -1005,11 +1001,31 @@ namespace HsMod
             }
         }
 
+        public static void ShowEula()
+        {
+            if (!isEulaRead.Value)
+            {
+                UIStatus.Get()?.AddInfo(LocalizationManager.GetLangValue("hsmod.declaration"), 23.333f);
+                AlertPopup.PopupInfo popupInfo = new AlertPopup.PopupInfo();
+                popupInfo.m_headerText = "HsMod End-User License Agreement";
+                popupInfo.m_text = LocalizationManager.GetLangValue("hsmod.declaration");
+                popupInfo.m_showAlertIcon = false;
+                popupInfo.m_responseDisplay = AlertPopup.ResponseDisplay.OK;
+                DialogManager.Get()?.ShowPopup(popupInfo);
+                isEulaRead.Value = true;
+            }
+            else
+            {
+                UIStatus.Get()?.AddInfo(LocalizationManager.GetLangValue("hsmod.declaration"), 6.666f);
+            }
+        }
+
         public static void OnHsLoginCompleted()
         {
             Utils.CacheLoginStatus = true;
             try
             {
+                ShowEula();
                 if (!isIdleKickEnable.Value)
                 {
                     InactivePlayerKicker.Get()?.SetShouldCheckForInactivity(isIdleKickEnable.Value);

@@ -286,6 +286,7 @@ namespace HsMod
 
             [HarmonyPrefix]
             [HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "TryCallSDK")]
+            [HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "CallInterfaceCallSDK")]
             public static bool PatchAntiCheatManagerTryCallSDK(ref string scriptId)
             {
                 Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat TryCallSDK feature is disabled.");
@@ -293,10 +294,10 @@ namespace HsMod
             }
 
             [HarmonyPrefix]
-            [HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "CallInterfaceCallSDK")]
-            public static bool PatchAntiCheatManagerCallInterfaceCallSDK(ref Action<string> handler, ref string scriptId)
+            [HarmonyPatch(typeof(AntiCheatSDK.AntiCheatManager), "InnerSDKMethodCall")]
+            public static bool PatchAntiCheatManagerInnerSDKMethodCall(ref Action<string> handler, ref string args)
             {
-                Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat CallInterfaceCallSDK feature is disabled.");
+                Utils.MyLogger(BepInEx.Logging.LogLevel.Debug, "AntiCheat InnerSDKMethodCall feature is disabled.");
                 return false;
             }
         }
@@ -617,29 +618,21 @@ namespace HsMod
             //战令、成就等奖励领取提示
             [HarmonyPrefix]
             [HarmonyPatch(typeof(Hearthstone.Progression.RewardTrack), "HandleRewardGranted")]
-            public static bool PatchHandleRewardGranted(//隐藏通行证奖励
-            int rewardTrackId,
-            int level,
-             RewardTrackPaidType paidType,
-                     List<PegasusUtil.RewardItemOutput> rewardItemOutput) // 隐藏通行证奖励
-                         {
-                             if (!isRewardToastShow.Value)
-                         {
-                           // 判断是免费还是付费通行证
-                             bool isPaidTrack = paidType != RewardTrackPaidType.RTPT_FREE;
-                            // Acknowledge GLOBAL track rewards
-                             Hearthstone.Progression.RewardTrackManager.Get()
-                             .GetRewardTrack(Assets.Global.RewardTrackType.GLOBAL)?
-                             .AckReward(rewardTrackId, level, paidType);
-                             // Acknowledge BATTLEGROUNDS track rewards
-                            Hearthstone.Progression.RewardTrackManager.Get()
-                             .GetRewardTrack(Assets.Global.RewardTrackType.BATTLEGROUNDS)?
-                             .AckReward(rewardTrackId, level, paidType);
-                             return false; // 阻止原始方法执行
-                         }
+            public static bool PatchHandleRewardGranted(int rewardTrackId, int level, PegasusShared.RewardTrackPaidType paidType, List<PegasusUtil.RewardItemOutput> rewardItemOutput)      //隐藏通行证奖励
+            {
+                if (!isRewardToastShow.Value)
+                {
+                    RewardTrackDbfRecord record = GameDbf.RewardTrack.GetRecord(rewardTrackId);
+                    if (record == null)
+                    {
+                        return false;
+                    }
 
-     return true; // 允许原始方法执行
- }
+                    Hearthstone.Progression.RewardTrackManager.Get()?.GetRewardTrack(record.RewardTrackType)?.AckReward(rewardTrackId, level, paidType);
+                    return false;
+                }
+                else return true;
+            }
 
             //测试补丁，屏蔽奖励显示
             [HarmonyPrefix]

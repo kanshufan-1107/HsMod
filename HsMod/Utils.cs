@@ -1011,6 +1011,7 @@ namespace HsMod
                 popupInfo.m_text = LocalizationManager.GetLangValue("hsmod.declaration");
                 popupInfo.m_showAlertIcon = false;
                 popupInfo.m_responseDisplay = AlertPopup.ResponseDisplay.OK;
+                popupInfo.m_attentionCategory = UserAttentionBlocker.NONE;
                 DialogManager.Get()?.ShowPopup(popupInfo);
                 isEulaRead.Value = true;
             }

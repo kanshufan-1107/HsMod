@@ -1738,6 +1738,8 @@ namespace HsMod
                                 Utils.TryReportOpponent();
                             }
                             string finalResult = "未知";
+							if (GameMgr.Get().GetGameType() != PegasusShared.GameType.GT_BATTLEGROUNDS)
+							{
                             switch (playState)
                             {
                                 case TAG_PLAYSTATE.WINNING:
@@ -1755,6 +1757,22 @@ namespace HsMod
                                 default:
                                     break;
                             }
+							}
+							else
+							{
+								switch (GameState.Get().GetFriendlySidePlayer().GetHero().GetRealTimePlayerLeaderboardPlace())
+								{
+									case 1: finalResult = "第一名"; break;
+									case 2: finalResult = "第二名"; break;
+									case 3: finalResult = "第三名"; break;
+									case 4: finalResult = "第四名"; break;
+									case 5: finalResult = "第五名"; break;
+									case 6: finalResult = "第六名"; break;
+									case 7: finalResult = "第七名"; break;
+									case 8: finalResult = "第八名"; break;
+									default: break;
+								}
+							}
 
                             string gameType = (GameMgr.Get().GetGameType() == PegasusShared.GameType.GT_RANKED) ? GameMgr.Get().GetFormatType().ToString() : GameMgr.Get().GetGameType().ToString();
 
@@ -1947,7 +1965,7 @@ namespace HsMod
             [HarmonyTargetMethod]
             private static MethodInfo PublicLogArchiveLogPath()
             {
-                return AccessTools.TypeByName("Log").GetMethod("get_LogsPath"); ;
+                return AccessTools.TypeByName("LogSessionConfig").GetMethod("get_LogSessionDirectory"); ;
             }
 
             [HarmonyPostfix]

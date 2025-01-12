@@ -263,9 +263,9 @@ https://eu.battle.net/login/en/?app=wtcg
 
 ### Groups
 
-Telegram @HearthstoneMod
+Telegram @HearthstoneMod (**Suggest and Recommend**)
 
-[Discord](https://discord.gg/BCnhxtXHVq)
+[Discord](https://discord.gg/BCnhxtXHVq) (*Not recommended*)
 
 ### TODO
 

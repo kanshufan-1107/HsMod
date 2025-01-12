@@ -609,17 +609,17 @@ namespace HsMod
                 ___m_rerollButton.TriggerPress();
                 ___m_rerollButton.TriggerRelease();
                 return false;
-			}
-			//处理未领取的奖励
-			[HarmonyPostfix]
-			[HarmonyPatch(typeof(RewardTrackSeasonRoll), "Show")]
-			public static void Patch_RewardTrackSeasonRoll_Show(RewardTrackSeasonRoll __instance)
-			{
-				if (isAlertPopupShow.Value)
-					return;
+            }
+            //处理未领取的奖励
+            [HarmonyPostfix]
+            [HarmonyPatch(typeof(RewardTrackSeasonRoll), "Show")]
+            public static void Patch_RewardTrackSeasonRoll_Show(RewardTrackSeasonRoll __instance)
+            {
+                if (isAlertPopupShow.Value)
+                    return;
 
-				__instance.ShowChooseOneRewardPickerPopup();
-			}
+                __instance.ShowChooseOneRewardPickerPopup();
+            }
 
 
 

@@ -263,9 +263,9 @@ Note: The `Env` parameter for China is `cn.actual.battlenet.com.cn`.
 
 ### Groups
 
-Telegram @HearthstoneMod
+Telegram @HearthstoneMod (**Suggest and Recommend**)
 
-[Discord](https://discord.gg/BCnhxtXHVq)
+[Discord](https://discord.gg/BCnhxtXHVq) (*Not recommended*)
 
 ### TODO 
 

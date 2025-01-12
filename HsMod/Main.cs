@@ -10,14 +10,14 @@ namespace HsMod
     [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
     public class Plugin : BaseUnityPlugin
     {
-		private void OnGUI()
-		{
-			if (UtilsArgu.Instance.Exists("hsunitid"))
-				GUILayout.Label(new GUIContent(UtilsArgu.Instance.Single("hsunitid")), new GUILayoutOption[]
-				{
-					GUILayout.Width(200f)
-				});
-		}
+        private void OnGUI()
+        {
+            if (UtilsArgu.Instance.Exists("hsunitid"))
+                GUILayout.Label(new GUIContent(UtilsArgu.Instance.Single("hsunitid")), new GUILayoutOption[]
+                {
+                    GUILayout.Width(200f)
+                });
+        }
         private void Awake()
         {
             // enable logging bepinex and unity to disk without append

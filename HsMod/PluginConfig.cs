@@ -301,7 +301,7 @@ namespace HsMod
             fakeCardPremium4 = config.Bind(LocalizationManager.GetLangValue("fakeCardPremium4.label"), LocalizationManager.GetLangValue("fakeCardPremium4.name"), TAG_PREMIUM.GOLDEN, new ConfigDescription(LocalizationManager.GetLangValue("fakeCardPremium4.description"), null, new object[] { "Advanced" }));
             fakeCardID5 = config.Bind(LocalizationManager.GetLangValue("fakeCardID5.label"), LocalizationManager.GetLangValue("fakeCardID5.name"), 67040, new ConfigDescription(LocalizationManager.GetLangValue("fakeCardID5.description"), null, new object[] { "Advanced" }));
             fakeCardPremium5 = config.Bind(LocalizationManager.GetLangValue("fakeCardPremium5.label"), LocalizationManager.GetLangValue("fakeCardPremium5.name"), TAG_PREMIUM.GOLDEN, new ConfigDescription(LocalizationManager.GetLangValue("fakeCardPremium5.description"), null, new object[] { "Advanced" }));
-			isAutoRedundantNDE = config.Bind(LocalizationManager.GetLangValue("isAutoRedundantNDE.label"), LocalizationManager.GetLangValue("isAutoRedundantNDE.name"), false, LocalizationManager.GetLangValue("isAutoRedundantNDE.description"));
+            isAutoRedundantNDE = config.Bind(LocalizationManager.GetLangValue("isAutoRedundantNDE.label"), LocalizationManager.GetLangValue("isAutoRedundantNDE.name"), false, LocalizationManager.GetLangValue("isAutoRedundantNDE.description"));
 
             InitCardsMapping();
             LoadSkinsConfigFromFile();

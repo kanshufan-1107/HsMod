@@ -113,7 +113,6 @@ namespace HsMod
             return true;
         }
 
-
         public static void UpdateHeroTag(string cardId)
         {
             if (!Utils.CheckInfo.IsHero(cardId, out _))

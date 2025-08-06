@@ -430,9 +430,10 @@ namespace HsMod
             int totalSell = 0;
             Network network = Network.Get();
             network.RegisterNetHandler(PegasusUtil.BoughtSoldCard.PacketID.ID, new Network.NetHandler(TryRefundCardDisenchantCallback), null);
+            Dictionary<string, CraftingPendingTransaction> pendingClientTransactionMaps = new Dictionary<string, CraftingPendingTransaction>();
             foreach (var record in CollectionManager.Get().GetOwnedCards())
             {
-                if (record != null && record.IsCraftable && record.IsRefundable && (record.OwnedCount > 0))    // 金卡和普卡会分别触发一次，但是一次性分完
+                if (record != null && record.IsCraftable && record.IsRefundable && (record.OwnedCount > 0))    // fixme: 需要强制刷新卡牌数量缓存，无法一次性全部分解。
                 {
                     CraftingManager.Get().TryGetCardSellValue(record.CardId, record.PremiumType, out int sellValue);
                     CraftingManager.Get().TryGetCardSellValue(record.CardId, TAG_PREMIUM.NORMAL, out int normalSellValue);
@@ -442,31 +443,56 @@ namespace HsMod
                     CraftingManager.Get().TryGetCardBuyValue(record.CardId, TAG_PREMIUM.NORMAL, out int normalBuyValue);
                     CraftingManager.Get().TryGetCardBuyValue(record.CardId, TAG_PREMIUM.GOLDEN, out int goldenBuyValue);
 
+                    if ((sellValue != buyValue) || (normalBuyValue != normalSellValue) || (goldenBuyValue != goldenSellValue)) continue;
 
                     int numNormalCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.NORMAL);
                     int numGoldenCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.GOLDEN);
                     int numSignatureCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.SIGNATURE);
                     int numDiamondCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardId, TAG_PREMIUM.DIAMOND);
 
-                    if ((sellValue == buyValue) && (normalBuyValue == normalSellValue) && (goldenBuyValue == goldenSellValue))
+                    if (!pendingClientTransactionMaps.ContainsKey(record.CardId))
                     {
-                        CraftingPendingTransaction m_pendingClientTransaction = new CraftingPendingTransaction
+                        CraftingPendingTransaction pendingClientTransaction = new CraftingPendingTransaction
                         {
                             CardID = record.CardId,
                             Premium = record.PremiumType,
-                            NormalDisenchantCount = numNormalCopiesInCollection,
-                            GoldenDisenchantCount = numGoldenCopiesInCollection,
+                            NormalDisenchantCount = 0,
+                            GoldenDisenchantCount = 0,
                             SignatureDisenchantCount = 0,
                             DiamondDisenchantCount = 0
                         };
-
-                        totalSell += record.OwnedCount * sellValue;
-                        sellValue = -(normalSellValue * numNormalCopiesInCollection + goldenSellValue * numGoldenCopiesInCollection);
-                        network.CraftingTransaction(m_pendingClientTransaction, sellValue, numNormalCopiesInCollection, numGoldenCopiesInCollection, numSignatureCopiesInCollection, numDiamondCopiesInCollection);
-                        m_pendingClientTransaction = null;
-                        MyLogger(LogLevel.Warning, $"尝试分解卡牌：{record.CardId}({record.Name.ToString()})，普通{numNormalCopiesInCollection}，金卡{numGoldenCopiesInCollection}。");
+                        pendingClientTransactionMaps[record.CardId] = pendingClientTransaction;
+                    }
+                    CraftingPendingTransaction m_pendingClientTransaction = pendingClientTransactionMaps[record.CardId];
+                    switch (record.PremiumType)
+                    {
+                        case TAG_PREMIUM.NORMAL:
+                            m_pendingClientTransaction.NormalDisenchantCount = numNormalCopiesInCollection;
+                            break;
+                        case TAG_PREMIUM.GOLDEN:
+                            m_pendingClientTransaction.GoldenDisenchantCount = numGoldenCopiesInCollection;
+                            break;
                     }
                 }
+
+            }
+            foreach (var record in pendingClientTransactionMaps.Values)
+            {
+                if (record == null) continue;
+                int numNormalCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardID, TAG_PREMIUM.NORMAL);
+                int numGoldenCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardID, TAG_PREMIUM.GOLDEN);
+                int numSignatureCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardID, TAG_PREMIUM.SIGNATURE);
+                int numDiamondCopiesInCollection = CollectionManager.Get().GetNumCopiesInCollection(record.CardID, TAG_PREMIUM.DIAMOND);
+
+                int normalSells = record.NormalDisenchantCount;
+                int goldenSells = record.GoldenDisenchantCount;
+                CraftingManager.Get().TryGetCardSellValue(record.CardID, TAG_PREMIUM.NORMAL, out int normalSellValue);
+                CraftingManager.Get().TryGetCardSellValue(record.CardID, TAG_PREMIUM.GOLDEN, out int goldenSellValue);
+                int sellValue = -(normalSellValue * normalSells + goldenSellValue * goldenSells);
+                totalSell += -sellValue;
+                network.CraftingTransaction(record, sellValue, numNormalCopiesInCollection, numGoldenCopiesInCollection, numSignatureCopiesInCollection, numDiamondCopiesInCollection);
+                MyLogger(LogLevel.Warning, $"尝试分解卡牌：{record.CardID}，普通{normalSells}，金卡{goldenSells}。");
+
             }
             MyLogger(LogLevel.Warning, "尝试分解粉尘：" + totalSell);
             UIStatus.Get().AddInfo("尝试分解粉尘：" + totalSell);
@@ -1208,7 +1234,8 @@ namespace HsMod
             }
             else
             {
-                UIStatus.Get()?.AddInfo(LocalizationManager.GetLangValue("hsmod.declaration"), 6.666f);
+                if ((Localization.GetLocale() == Locale.zhCN) || (pluginInitLanague.Value == "zhCN") || (string.Compare(System.Globalization.CultureInfo.CurrentCulture.Name, "zh-CN") == 0))
+                    UIStatus.Get()?.AddInfo(LocalizationManager.GetLangValue("hsmod.declaration"), 6.666f);
             }
         }
 

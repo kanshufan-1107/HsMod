@@ -534,8 +534,48 @@ namespace HsMod
 
             StringBuilder builder = new StringBuilder();
             string body = @"<h3 style=""text-align: center;"">皮肤信息</h3>";
+            builder.Append(body);
 
-            body += "<h4>幸运币</h4>";
+            body = "<h4>宠物</h4>";
+            try
+            {
+                string temp = @"<table border=0 style=""text-align: center;""><tr>";
+
+                temp += "<th>索引</th>";
+                temp += "<th>宠物</th>";
+                temp += "<th>名称</th>";
+                temp += "</tr>";
+
+                foreach (var record in GameDbf.PetVariant.GetRecords().OrderBy(x => x.ID).ToList())
+                {
+                    if (record != null)
+                    {
+                        temp += "<tr>";
+                        temp += $"<td>{record.ID}</td>";
+                        temp += $"<td>{record.PetId}</td>";
+
+                        temp += $"<td>{record.Name.GetString()}</td>";
+                        temp += "</tr>";
+                    }
+
+                }
+
+                temp += "</table>";
+                body += temp;
+            }
+            catch (Exception ex)
+            {
+                body += $@"宠物信息获取异常<br /><p style=""white-space: pre-line;"">{ex}</p>";
+            }
+            finally
+            {
+                body += "<br /><hr />";
+            }
+            builder.Append(body);
+
+
+
+            body = "<h4>幸运币</h4>";
             try
             {
                 string temp = @"<table border=0 style=""text-align: center;""><tr>";

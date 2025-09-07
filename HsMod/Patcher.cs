@@ -442,7 +442,7 @@ namespace HsMod
 
             //屏蔽错误报告
             [HarmonyPrefix]
-            [HarmonyPatch(typeof(Blizzard.BlizzardErrorMobile.ExceptionReporter), "ReportCaughtException", new Type[] { typeof(Exception) })]
+            [HarmonyPatch(typeof(Blizzard.BlizzardErrorMobile.ExceptionReporter), "ReportCaughtException", new Type[] { typeof(Exception), typeof(string)})]
             public static bool PatchReportCaughtException(ref Exception exception)
             {
                 Utils.MyLogger(BepInEx.Logging.LogLevel.Warning, "message:" + exception.Message + "\nInnerException:\n" + exception.InnerException + "\nStackTrace:\n" + exception.StackTrace);
@@ -1995,6 +1995,19 @@ namespace HsMod
                     title = $"对手职业是{heroClass}，套牌{oppoCardCount}张";
                 }
             }
+            
+            // 屏蔽暗月宝藏
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(Hub), "PreloadLuckyDraw")]
+            public static bool PatchNotifySceneLoadedWhenReady(Hub __instance)
+            {
+                if (shieldMainBoxLuckyDraw.Value)
+                {
+                    return false;
+                }
+                return true;
+            }
+
             //// 生成Power.log
             //[HarmonyPrefix]
             //[HarmonyPatch(typeof(Log), "get_ConfigPath")]
@@ -2355,23 +2368,23 @@ namespace HsMod
             }
 
 
-            ////鲍勃替换语音
-            //[HarmonyPrefix]
-            //[HarmonyPatch(typeof(TB_BaconShop), "GetFavoriteBattlegroundsGuideSkinCardId")]
-            //public static bool PatchGetFavoriteBattlegroundsGuideSkinCardId(ref string __result)
-            //{
-            //    if (skinBob.Value == -1)
-            //        return true;
-            //    else
-            //    {
-            //        if (Utils.CheckInfo.IsHero(skinBob.Value, out Assets.CardHero.HeroType _))
-            //        {
-            //            __result = GameUtils.TranslateDbIdToCardId(skinBob.Value);
-            //            return false;
-            //        }
-            //        else return true;
-            //    }
-            //}
+            //鲍勃替换语音
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(TB_BaconShop), "GetBattlegroundsGuideSkinCardId")]
+            public static bool PatchGetFavoriteBattlegroundsGuideSkinCardId(ref string __result)
+            {
+                if (skinBob.Value == -1)
+                    return true;
+                else
+                {
+                    if (Utils.CheckInfo.IsHero(skinBob.Value, out Assets.CardHero.HeroType _))
+                    {
+                        __result = GameUtils.TranslateDbIdToCardId(skinBob.Value);
+                        return false;
+                    }
+                    else return true;
+                }
+            }
 
             //游戏面板替换
             [HarmonyPrefix]
